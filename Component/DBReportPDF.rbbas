@@ -560,7 +560,8 @@ Protected Class DBReportPDF
 		DBReportPDF 0.1
 		
 		4 Jan 2014
-		Bernardo Monsalve
+		by Bernardo Monsalve
+		Copyright © 2014 Bernardo Monsalve. All rights reserved.
 		
 		---
 		
@@ -772,7 +773,7 @@ Protected Class DBReportPDF
 	#tag Constant, Name = kPageWidth, Type = Double, Dynamic = False, Default = \"612", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.1.1201", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.1208", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = Z_BUF_ERROR, Type = Double, Dynamic = False, Default = \"-5", Scope = Private
