@@ -773,7 +773,7 @@ Protected Class DBReportPDF
 	#tag Constant, Name = kPageWidth, Type = Double, Dynamic = False, Default = \"612", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.1208", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.1214", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = Z_BUF_ERROR, Type = Double, Dynamic = False, Default = \"-5", Scope = Private
