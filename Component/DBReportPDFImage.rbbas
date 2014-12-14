@@ -9,9 +9,9 @@ Inherits DBReportPDFXObject
 		  FileRoot= root
 		  root.Objects.Append Me
 		  
-		  Dim ratio As Double = Max(whichImage.Height/sourceHeight, whichImage.Width/sourceWidth)
+		  Dim ratio As Double= pictureQuality/ 100
 		  
-		  Image= PictureScale(whichImage,whichImage.Width* ratio, whichImage.Height* ratio)
+		  Image= PictureScale(whichImage, whichImage.Width* ratio, whichImage.Height* ratio)
 		  Name= pdfReferenceName
 		  Type= "XObject"
 		  SubType= "Image"
@@ -42,7 +42,7 @@ Inherits DBReportPDFXObject
 	#tag Method, Flags = &h21
 		Private Shared Function PictureScale(p as Picture, maxWidth as Integer, maxHeight as Integer) As Picture
 		  ' Calculate the scale ratio
-		  Dim ratio As Double = Min( maxHeight/p.Height, maxWidth/p.Width)
+		  Dim ratio As Double = Min(maxHeight/ p.Height, maxWidth/ p.Width)
 		  ' Create a new picture to return
 		  Dim newPic As New Picture( p.Width* ratio, p.Height* ratio )
 		  ' background white
