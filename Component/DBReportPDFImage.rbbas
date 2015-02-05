@@ -11,7 +11,7 @@ Inherits DBReportPDFXObject
 		  
 		  Dim ratio As Double= pictureQuality/ 100
 		  
-		  Image= PictureScale(whichImage, whichImage.Width* ratio, whichImage.Height* ratio)
+		  Image= PictureScale(whichImage,whichImage.Width* ratio, whichImage.Height* ratio)
 		  Name= pdfReferenceName
 		  Type= "XObject"
 		  SubType= "Image"
@@ -42,14 +42,14 @@ Inherits DBReportPDFXObject
 	#tag Method, Flags = &h21
 		Private Shared Function PictureScale(p as Picture, maxWidth as Integer, maxHeight as Integer) As Picture
 		  ' Calculate the scale ratio
-		  Dim ratio As Double = Min(maxHeight/ p.Height, maxWidth/ p.Width)
+		  Dim ratio As Double = Min( maxHeight/p.Height, maxWidth/p.Width)
 		  ' Create a new picture to return
 		  Dim newPic As New Picture( p.Width* ratio, p.Height* ratio )
 		  ' background white
 		  newPic.Graphics.ForeColor= &cFFFFFF00
 		  newPic.Graphics.FillRect 0, 0, newPic.Width, newPic.Height
 		  ' Draw picture in the new size
-		  newPic.graphics.DrawPicture( p, 0, 0, newPic.Width, newPic.Height, 0, 0, p.Width, p.Height)
+		  newPic.Graphics.DrawPicture( p, 0, 0, newPic.Width, newPic.Height, 0, 0, p.Width, p.Height)
 		  
 		  Return newPic
 		End Function
@@ -90,65 +90,67 @@ Inherits DBReportPDFXObject
 			Name="ByteOffset"
 			Group="Behavior"
 			Type="Integer"
-			InheritedFrom="DBReportPDFObject"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Generator"
 			Group="Behavior"
 			Type="Integer"
-			InheritedFrom="DBReportPDFObject"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="MD5"
 			Group="Behavior"
 			Type="String"
-			InheritedFrom="DBReportPDFXObject"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Number"
 			Group="Behavior"
 			Type="Integer"
-			InheritedFrom="DBReportPDFObject"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="PictureQuality"
+			Group="Behavior"
+			InitialValue="80"
+			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Type"
 			Group="Behavior"
 			Type="String"
 			EditorType="MultiLineEditor"
-			InheritedFrom="DBReportPDFObject"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

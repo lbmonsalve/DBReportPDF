@@ -152,12 +152,12 @@ Inherits DBReportPDFObject
 		#tag ViewProperty
 			Name="Ascent"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="AvgWidth"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="ByteOffset"
@@ -168,12 +168,12 @@ Inherits DBReportPDFObject
 		#tag ViewProperty
 			Name="CapHeight"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Descent"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="FontFamily"
@@ -254,12 +254,12 @@ Inherits DBReportPDFObject
 		#tag ViewProperty
 			Name="ItalicAngle"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Leading"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -271,7 +271,7 @@ Inherits DBReportPDFObject
 		#tag ViewProperty
 			Name="MaxWidth"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -288,12 +288,13 @@ Inherits DBReportPDFObject
 		#tag ViewProperty
 			Name="stemH"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="StemV"
 			Group="Behavior"
-			Type="Single"
+			InitialValue="80"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
@@ -318,7 +319,7 @@ Inherits DBReportPDFObject
 		#tag ViewProperty
 			Name="xHeight"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

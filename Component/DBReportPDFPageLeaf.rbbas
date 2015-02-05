@@ -67,6 +67,12 @@ Inherits DBReportPDFPage
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub AddTextBlock(whichText As string)
+		  Contents.AddTextBlock whichText
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h1000
 		Sub Constructor(width As Double, height As Double, root As DBReportPDF, parent As DBReportPDFPages)
 		  // Calling the overridden superclass constructor.

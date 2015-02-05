@@ -252,7 +252,12 @@ Inherits DBReportPDFObject
 		  s= s+ "ET"+ CR
 		  
 		  Objects.Append s
-		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub AddTextBlock(whichText As string)
+		  Objects.Append whichText
 		End Sub
 	#tag EndMethod
 
@@ -293,8 +298,8 @@ Inherits DBReportPDFObject
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Function GetRGBTriplet(whichColor as color) As string
+	#tag Method, Flags = &h0
+		 Shared Function GetRGBTriplet(whichColor as color) As string
 		  return fs(whichColor.Red/ 255)+ " "+ fs(whichColor.Green/ 255)+ " "+ fs(whichColor.Blue/ 255)
 		End Function
 	#tag EndMethod

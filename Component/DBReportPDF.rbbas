@@ -199,7 +199,10 @@ Protected Class DBReportPDF
 		  
 		  If image.depth<> 0 Then
 		    imageRef= ObjectCatalog.Pages.GetImageReferenceName(image, 0, 0, image.width, image.height, pictureQuality)
-		    ObjectPageCurrent.AddImage(imageRef, x, mPageHeight- y- destHeight, destWidth, destHeight)
+		    
+		    Dim ratio As Double = Min(destHeight/image.Height, destWidth/image.Width)
+		    
+		    ObjectPageCurrent.AddImage(imageRef, x, mPageHeight- y- image.Height* ratio, image.Width* ratio, image.Height* ratio)
 		  End
 		End Sub
 	#tag EndMethod
@@ -306,6 +309,148 @@ Protected Class DBReportPDF
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub DrawTextArea(texta As TextArea, x As Double, y As Double, width As Double, height As Double = - 1)
+		  If texta.Text= "" Then Return
+		  
+		  #pragma BackgroundTasks false // to speed up
+		  
+		  Dim st As StyledText= texta.StyledText
+		  Dim stylesCount As Integer= st.StyleRunCount- 1
+		  Dim sr As StyleRun
+		  Dim ra As Range
+		  Dim fontRef, s, CR As String
+		  Dim gtextAscent, gtextHeight As Double
+		  Dim currentLeft As Double
+		  Dim currentBaseline As Double= mPageHeight- y
+		  Dim currentMarginBottom As Double
+		  Dim currentColor As Color= &cFFFFFFFF
+		  Dim currentAlignment As Integer= -1
+		  
+		  If height= -1 Then currentMarginBottom= 0 Else currentMarginBottom= mPageHeight- y- height
+		  
+		  CR= EndOfLine.Macintosh
+		  
+		  Static p As Picture
+		  If p= Nil Then p= New Picture(10, 10, 1)
+		  
+		  s= "BT"+ CR // begin text block
+		  
+		  For i As Integer= 0 To stylesCount
+		    sr= st.StyleRun(i)
+		    ra= st.StyleRunRange(i)
+		    
+		    fontRef= ObjectCatalog.Pages.GetFontReferenceName(sr.Font, sr.Bold, sr.Italic)
+		    
+		    s= s+ "/"+ fontRef+ " "+ DBReportPDFObject.fs(sr.Size)+ " Tf"+ CR
+		    
+		    If currentColor<> sr.TextColor Then
+		      currentColor= sr.TextColor
+		      s= s+ DBReportPDFContents.GetRGBTriplet(currentColor)+ " RG"+ CR // set stroking color
+		      s= s+ DBReportPDFContents.GetRGBTriplet(currentColor)+ " rg"+ CR // set non-stroking color
+		    End If
+		    
+		    Dim g As Graphics= p.Graphics
+		    g.TextFont= sr.Font
+		    g.TextSize= sr.Size
+		    g.Bold= sr.Bold
+		    g.Italic= sr.Italic
+		    gtextAscent= g.TextAscent
+		    gtextHeight= g.TextHeight
+		    
+		    // check the alignment using the Paragraph list
+		    Dim alignment As Integer= 0
+		    Dim pc As Integer= st.ParagraphCount- 1
+		    For pi As Integer= 0 To pc
+		      Dim pa As Paragraph= st.Paragraph(pi)
+		      
+		      If pa.StartPos<= ra.StartPos Then
+		        alignment= pa.Alignment
+		      End
+		    Next
+		    
+		    // apply alignment
+		    If currentAlignment<> alignment Then
+		      currentAlignment= alignment
+		      currentLeft= x
+		    End if
+		    
+		    Dim n As Integer= CountFields(ReplaceLineEndings(sr.Text, EndOfLine.Windows), EndOfLine.Windows)
+		    Dim currentLine As String
+		    
+		    For j As Integer= 1 To n
+		      currentLine= NthField(ReplaceLineEndings(sr.Text, EndOfLine.Windows), EndOfLine.Windows, j)
+		      
+		      If (currentLeft+ g.StringWidth(currentLine))<= (x+ width) Then // one line
+		        
+		        // check alignment
+		        Select case alignment
+		        case TextArea.AlignCenter
+		          currentLeft= x+ ((width- g.StringWidth(currentLine))/ 2)
+		        case TextArea.AlignRight
+		          currentLeft= x+ width- g.StringWidth(currentLine)
+		        else // Left
+		        end Select
+		        
+		        s= s+ "1 0 0 1 "+ DBReportPDFObject.fs(currentLeft)+ " "+ DBReportPDFObject.fs(currentBaseline)+ " Tm"+ CR
+		        s= s+ DBReportPDFObject.FormatLiteralString(currentLine)+ " Tj"+ CR
+		      Else // multiline
+		        Dim words() As String= currentLine.Split(" ")
+		        currentLine= ""
+		        
+		        While Ubound(words)> -1
+		          If (currentLeft+ g.StringWidth(currentLine+ words(0)))<= (x+ width) Then
+		            currentLine= currentLine+ " "+ words(0)
+		            words.Remove 0
+		            If Ubound(words)= -1 Then
+		              s= s+ "1 0 0 1 "+ DBReportPDFObject.fs(currentLeft)+ " "+ DBReportPDFObject.fs(currentBaseline)+ " Tm"+ CR
+		              s= s+ DBReportPDFObject.FormatLiteralString(currentLine)+ " Tj"+ CR
+		            End If
+		          Else
+		            // TODO: chk for long word
+		            s= s+ "1 0 0 1 "+ DBReportPDFObject.fs(currentLeft)+ " "+ DBReportPDFObject.fs(currentBaseline)+ " Tm"+ CR
+		            s= s+ DBReportPDFObject.FormatLiteralString(currentLine)+ " Tj"+ CR
+		            currentLine= ""
+		            currentLeft= x
+		            words.Remove 0
+		            currentBaseline= currentBaseline- gTextHeight- (gTextHeight- gtextAscent)
+		            If currentBaseline< currentMarginBottom Then
+		              s= s+ "ET"+ CR // end text blocl
+		              ObjectPageCurrent.AddTextBlock s
+		              NextPage
+		              s= "BT"+ CR // begin text block
+		              s= s+ "/"+ fontRef+ " "+ DBReportPDFObject.fs(sr.Size)+ " Tf"+ CR
+		              currentBaseline= mPageHeight- y
+		            End If
+		          End If
+		        Wend
+		      End If
+		      
+		      If j< n Then
+		        currentLeft= x
+		        currentBaseline= currentBaseline- gTextHeight- (gTextHeight- gtextAscent)
+		        If currentBaseline< currentMarginBottom Then
+		          s= s+ "ET"+ CR // end text blocl
+		          ObjectPageCurrent.AddTextBlock s
+		          NextPage
+		          s= "BT"+ CR // begin text block
+		          s= s+ "/"+ fontRef+ " "+ DBReportPDFObject.fs(sr.Size)+ " Tf"+ CR
+		          currentBaseline= mPageHeight- y
+		        End If
+		      Else
+		        currentLeft= currentLeft+ g.StringWidth(currentLine)
+		      End If
+		      
+		    Next
+		    
+		  Next
+		  
+		  s= s+ "ET"+ CR // end text blocl
+		  
+		  ObjectPageCurrent.AddTextBlock s
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub FillOval(x As Double, y As Double, width As Double, height As Double)
 		  ObjectPageCurrent.AddFilledOval x, mPageHeight- y- height, width, height, penWidth, foreColor
 		End Sub
@@ -350,7 +495,7 @@ Protected Class DBReportPDF
 		  #endif
 		  
 		  'Constants:
-		  CR= EndOfLine
+		  CR= EndOfLine.Macintosh
 		  
 		  mPageSizeOriginal= New REALbasic.Point(mPageWidth, mPageHeight)
 		  
@@ -773,7 +918,7 @@ Protected Class DBReportPDF
 	#tag Constant, Name = kPageWidth, Type = Double, Dynamic = False, Default = \"612", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.1214", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.1404", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = Z_BUF_ERROR, Type = Double, Dynamic = False, Default = \"-5", Scope = Private

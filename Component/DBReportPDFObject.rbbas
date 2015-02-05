@@ -3,7 +3,7 @@ Protected Class DBReportPDFObject
 	#tag Method, Flags = &h0
 		Sub Constructor()
 		  'Constants:
-		  CR= EndOfLine
+		  CR= EndOfLine.Macintosh
 		End Sub
 	#tag EndMethod
 
@@ -50,14 +50,14 @@ Protected Class DBReportPDFObject
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Shared Function FormatLiteralString(src As String) As String
+	#tag Method, Flags = &h0
+		Attributes( Hidden )  Shared Function FormatLiteralString(src As String) As String
 		  Return "("+ FormatEscapeChars(src)+ ")"
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Shared Function Fs(whichNum As Double) As String
+	#tag Method, Flags = &h0
+		Attributes( Hidden )  Shared Function Fs(whichNum As Double) As String
 		  Dim s As String= ReplaceAll(Format(whichNum, "0.#####"), ",", ".")
 		  
 		  If Right(s, 1)= "." Then

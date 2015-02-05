@@ -134,6 +134,141 @@ Begin Window Window1
       Visible         =   True
       Width           =   42
    End
+   Begin TextArea TextArea1
+      AcceptTabs      =   ""
+      Alignment       =   0
+      AutoDeactivate  =   True
+      AutomaticallyCheckSpelling=   True
+      BackColor       =   &hFFFFFF
+      Bold            =   ""
+      Border          =   True
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Format          =   ""
+      Height          =   132
+      HelpTag         =   ""
+      HideSelection   =   True
+      Index           =   -2147483648
+      Italic          =   ""
+      Left            =   20
+      LimitText       =   0
+      LineHeight      =   0
+      LineSpacing     =   1
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   True
+      LockTop         =   True
+      Mask            =   ""
+      Multiline       =   True
+      ReadOnly        =   ""
+      Scope           =   0
+      ScrollbarHorizontal=   ""
+      ScrollbarVertical=   True
+      Styled          =   True
+      TabIndex        =   3
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   ""
+      TextColor       =   &h000000
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   63
+      Underline       =   ""
+      UseFocusRing    =   True
+      Visible         =   True
+      Width           =   560
+   End
+   Begin BevelButton BevelButton2
+      AcceptFocus     =   False
+      AutoDeactivate  =   True
+      BackColor       =   "&c00000000"
+      Bevel           =   0
+      Bold            =   False
+      ButtonType      =   0
+      Caption         =   "Styled INI"
+      CaptionAlign    =   3
+      CaptionDelta    =   0
+      CaptionPlacement=   1
+      Enabled         =   True
+      HasBackColor    =   False
+      HasMenu         =   0
+      Height          =   35
+      HelpTag         =   ""
+      Icon            =   ""
+      IconAlign       =   0
+      IconDX          =   0
+      IconDY          =   0
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   26
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   False
+      MenuValue       =   0
+      Scope           =   0
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextColor       =   "&c00000000"
+      TextFont        =   "System"
+      TextSize        =   ""
+      TextUnit        =   0
+      Top             =   351
+      Underline       =   False
+      Value           =   False
+      Visible         =   True
+      Width           =   80
+   End
+   Begin BevelButton BevelButton3
+      AcceptFocus     =   False
+      AutoDeactivate  =   True
+      BackColor       =   "&c00000000"
+      Bevel           =   0
+      Bold            =   False
+      ButtonType      =   0
+      Caption         =   "Styled PDF"
+      CaptionAlign    =   3
+      CaptionDelta    =   0
+      CaptionPlacement=   1
+      Enabled         =   True
+      HasBackColor    =   False
+      HasMenu         =   0
+      Height          =   35
+      HelpTag         =   ""
+      Icon            =   ""
+      IconAlign       =   0
+      IconDX          =   0
+      IconDY          =   0
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   118
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   False
+      MenuValue       =   0
+      Scope           =   0
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextColor       =   "&c00000000"
+      TextFont        =   "System"
+      TextSize        =   ""
+      TextUnit        =   0
+      Top             =   351
+      Underline       =   False
+      Value           =   False
+      Visible         =   True
+      Width           =   80
+   End
 End
 #tag EndWindow
 
@@ -192,12 +327,20 @@ End
 		  Dim p2() As Double= Array(400.0, 50.0, 450.0, 60.0, 440.0, 55.0, 400.0, 40.0)
 		  pdf.FillPolygon p2
 		  
+		  // a big picture
+		  Dim fPic As FolderItem= SpecialFolder.Documents.Child("Temp").Child("Big_Pine_landscape.jpg")
+		  If fPic<> Nil Then
+		    pdf.NextPage
+		    pdf.Landscape= True
+		    pdf.DrawPicture Picture.Open(fPic), 0, 0, 612, 612, Picture.QualityLow
+		  End If
+		  
 		  Dim f as FolderItem
 		  
 		  #if TargetLinux
 		    f= SpecialFolder.UserHome.Child("DBReportPDF test.pdf")
 		  #else
-		    f= SpecialFolder.Documents.Child("DBReportPDF test.pdf")
+		    f= SpecialFolder.Desktop.Child("DBReportPDF test.pdf")
 		  #endif
 		  
 		  pdf.Save(f)
@@ -219,6 +362,61 @@ End
 		  Me.AddRows s
 		  
 		  Me.ListIndex= 0
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events BevelButton2
+	#tag Event
+		Sub Action()
+		  Dim Text as String // text to be displayed in TextArea
+		  Dim st,ln as Integer // start and length values of a paragraph
+		  //define four paragraphs in Text
+		  Text = "This is the text that we are going to save " _
+		  +"into our file from the TextArea."+EndOfLine _
+		  +"Isn't that interesting?"+EndOfLine _
+		  +"Man, I sure do love using RB to take care of my projects."+EndOfLine _
+		  +"That's because the RS Engineering staff is just so awesome!"
+		  TextArea1.StyledText.Text = text //four paragraphs in Text
+		  TextArea1.StyledText.Bold(5, 2) = True
+		  TextArea1.StyledText.TextColor(5, 2) = &cFF0000 //bold and red
+		  TextArea1.StyledText.Size( 7, 10) = 16
+		  TextArea1.StyledText.Underline(12, 4) = True //16 pt underline
+		  TextArea1.StyledText.Size(100, 4) = 18
+		  TextArea1.StyledText.TextColor(100, 4) = &cFF00FF //18 pt and Magenta
+		  TextArea1.StyledText.Font(0, Len(text) ) = "Comic Sans MS"
+		  //center aliign second paragraph
+		  TextArea1.StyledText.ParagraphAlignment(1)=Paragraph.AlignCenter
+		  //set this paragraph in Helveticta, 18 pt bold, red
+		  //first get the start and length values for this paragraph...
+		  st=TextArea1.StyledText.Paragraph(1).StartPos
+		  ln=TextArea1.StyledText.Paragraph(1).Length+1
+		  
+		  //next apply attributes...
+		  TextArea1.StyledText.Bold(st,ln)=True
+		  TextArea1.StyledText.Font(st,ln)="Helvetica"
+		  TextArea1.StyledText.Size(st,ln)=18
+		  TextArea1.StyledText.TextColor(st,ln)=&cFF0000
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events BevelButton3
+	#tag Event
+		Sub Action()
+		  Dim pdf As New DBReportPDF //Default page size: letter
+		  
+		  pdf.DrawTextArea TextArea1, 50, 50, 500
+		  
+		  Dim f as FolderItem
+		  
+		  #if TargetLinux
+		    f= SpecialFolder.UserHome.Child("DBReportPDF StyledText test.pdf")
+		  #else
+		    f= SpecialFolder.Desktop.Child("DBReportPDF StyledText test.pdf")
+		  #endif
+		  
+		  pdf.Save(f)
+		  
+		  f.Launch
 		End Sub
 	#tag EndEvent
 #tag EndEvents
