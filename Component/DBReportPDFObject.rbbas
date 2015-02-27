@@ -36,8 +36,12 @@ Protected Class DBReportPDFObject
 		  Dim s As String
 		  Dim c As Integer
 		  For i As Integer= 1 To src.Len
-		    c= src.Mid(i, 1).Asc
-		    If c>= 32 And c<= 126 Then s= s+ Encodings.ASCII.Chr(c) Else s= s+ "\"+ Oct(c)
+		    c= ConvertEncoding(src.Mid(i, 1), Encodings.WindowsLatin1).Asc
+		    If c>= 32 And c<= 126 Then
+		      s= s+ Encodings.ASCII.Chr(c)
+		    Else
+		      s= s+ "\"+ Oct(c)
+		    End
 		  Next
 		  
 		  Return s

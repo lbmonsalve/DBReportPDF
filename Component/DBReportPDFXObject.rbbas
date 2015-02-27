@@ -52,7 +52,6 @@ Inherits DBReportPDFObject
 			Name="MD5"
 			Group="Behavior"
 			Type="String"
-			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -65,12 +64,6 @@ Inherits DBReportPDFObject
 			Group="Behavior"
 			Type="Integer"
 			InheritedFrom="DBReportPDFObject"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="PictureQuality"
-			Group="Behavior"
-			InitialValue="80"
-			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

@@ -19,7 +19,7 @@ Inherits DBReportPDFObject
 		  Dim s, filter As String
 		  Dim nLen1 As UInt64
 		  
-		  If FileFont.Exists Then  //TODO: seek on cahce
+		  If FileFont.Exists Then  //TODO: seek on cache
 		    Dim ReadStream as BinaryStream = BinaryStream.Open(FileFont, False)
 		    nLen1= ReadStream.Length
 		    s= ReadStream.Read(nLen1)

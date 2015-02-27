@@ -90,67 +90,72 @@ Inherits DBReportPDFXObject
 			Name="ByteOffset"
 			Group="Behavior"
 			Type="Integer"
+			InheritedFrom="DBReportPDFObject"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Generator"
 			Group="Behavior"
 			Type="Integer"
+			InheritedFrom="DBReportPDFObject"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			Type="Integer"
+			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			Type="Integer"
+			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="MD5"
 			Group="Behavior"
 			Type="String"
-			EditorType="MultiLineEditor"
+			InheritedFrom="DBReportPDFXObject"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			Type="String"
+			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Number"
 			Group="Behavior"
 			Type="Integer"
+			InheritedFrom="DBReportPDFObject"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="PictureQuality"
 			Group="Behavior"
 			InitialValue="80"
 			Type="Integer"
+			InheritedFrom="DBReportPDFXObject"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			Type="String"
+			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			Type="Integer"
+			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Type"
 			Group="Behavior"
 			Type="String"
 			EditorType="MultiLineEditor"
+			InheritedFrom="DBReportPDFObject"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
