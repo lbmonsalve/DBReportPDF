@@ -35,9 +35,13 @@ Inherits DBReportPDFObject
 		Function GetData() As String
 		  Dim s As String
 		  
-		  s= s+ "<< /Type /"+ Type+" /FontName /"+ FontName+ " /FontFamily /"+ FontFamily+ " /Flags "+ ConstructFlags
+		  s= s+ "<< /Type /"+ Type+" /FontName /"+ DBReportPDFFont.ChkFontNameKey(FontName, isBold, isItalic)
+		  s= s+ " /FontFamily ("+ FontFamily+ ") /Flags "+ ConstructFlags
 		  s= s+ " /FontBBox "+ FontBBox.DataStream+ " /MissingWidth 255 /StemV "+ Fs(StemV)+ " /StemH "+ Fs(stemH)
-		  s= s+ " /CapHeight "+ Fs(CapHeight)+ " /XHeight "+ Fs(xHeight)+ " /FontFile2 "+ FontFile.IndirectReference
+		  s= s+ " /CapHeight "+ Fs(CapHeight)+ " /XHeight "+ Fs(xHeight)
+		  If DBReportPDF.EmbeddedFonts Then
+		    s= s+ " /FontFile2 "+ FontFile.IndirectReference
+		  End
 		  s= s+ " /Ascent "+ Fs(Ascent)+ " /Descent "+ Fs(Descent)+ " /Leading "+ Fs(Leading)
 		  s= s+ " /MaxWidth "+ Fs(MaxWidth)+ " /AvgWidth "+ Fs(AvgWidth)+ " /ItalicAngle "+ Fs(ItalicAngle)
 		  s= s+ " >>"
@@ -152,12 +156,12 @@ Inherits DBReportPDFObject
 		#tag ViewProperty
 			Name="Ascent"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="AvgWidth"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="ByteOffset"
@@ -168,12 +172,12 @@ Inherits DBReportPDFObject
 		#tag ViewProperty
 			Name="CapHeight"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Descent"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="FontFamily"
@@ -254,12 +258,12 @@ Inherits DBReportPDFObject
 		#tag ViewProperty
 			Name="ItalicAngle"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Leading"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -271,7 +275,7 @@ Inherits DBReportPDFObject
 		#tag ViewProperty
 			Name="MaxWidth"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -288,12 +292,13 @@ Inherits DBReportPDFObject
 		#tag ViewProperty
 			Name="stemH"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="StemV"
 			Group="Behavior"
-			Type="Single"
+			InitialValue="80"
+			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
@@ -318,7 +323,7 @@ Inherits DBReportPDFObject
 		#tag ViewProperty
 			Name="xHeight"
 			Group="Behavior"
-			Type="Single"
+			Type="Double"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

@@ -14,8 +14,6 @@ Inherits DBReportPDFObject
 		  Next
 		  s= s+ "]"
 		  
-		  If FileRoot.Compression Then s= DBReportPDF.zlibCompress(s)
-		  
 		  Return s
 		End Function
 	#tag EndMethod
@@ -33,11 +31,9 @@ Inherits DBReportPDFObject
 		Function GetData() As String
 		  Dim s, filter As String
 		  
-		  If FileRoot.Compression Then filter= "/Filter /FlateDecode "
-		  
 		  s= CompileContentsStream
 		  
-		  Return "<< "+ filter+ "/Length "+ str(len(s))+ " >> "+ "stream"+ CR+ s+ CR+ "endstream"+ CR
+		  Return CR+ s+ CR
 		End Function
 	#tag EndMethod
 

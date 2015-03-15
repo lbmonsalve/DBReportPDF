@@ -62,7 +62,7 @@ Protected Class DBReportPDFObject
 
 	#tag Method, Flags = &h0
 		Attributes( Hidden )  Shared Function Fs(whichNum As Double) As String
-		  Dim s As String= ReplaceAll(Format(whichNum, "0.#####"), ",", ".")
+		  Dim s As String= ReplaceAll(Format(whichNum, "-0.#####"), ",", ".")
 		  
 		  If Right(s, 1)= "." Then
 		    Return Left(s, len(s)- 1)

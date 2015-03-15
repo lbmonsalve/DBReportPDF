@@ -44,8 +44,9 @@ Inherits DBReportPDFObject
 		  
 		  n= Ubound(Fonts)
 		  If n> -1 Then
+		    Dim nameCache As String= FileRoot.CacheGetBaseFont(whichFontName, bold, italic)
 		    For i= 0 To n
-		      if Fonts(i).BaseFont= FileRoot.CacheGetBaseFont(whichFontName, bold, italic) Then
+		      if Fonts(i).BaseFont= nameCache Then
 		        name= Fonts(i).Name
 		        Exit For
 		      End
