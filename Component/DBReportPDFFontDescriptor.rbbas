@@ -35,15 +35,17 @@ Inherits DBReportPDFObject
 		Function GetData() As String
 		  Dim s As String
 		  
-		  s= s+ "<< /Type /"+ Type+" /FontName /"+ DBReportPDFFont.ChkFontNameKey(FontName, isBold, isItalic)
-		  s= s+ " /FontFamily ("+ FontFamily+ ") /Flags "+ ConstructFlags
-		  s= s+ " /FontBBox "+ FontBBox.DataStream+ " /MissingWidth 255 /StemV "+ Fs(StemV)+ " /StemH "+ Fs(stemH)
-		  s= s+ " /CapHeight "+ Fs(CapHeight)+ " /XHeight "+ Fs(xHeight)
+		  s= s+ "<< /Type /"+ Type+" /FontName /"+ BaseFont
+		  s= s+ " /FontFamily ("+ FontFamily+ ") /Flags "+ ConstructFlags+ " /FontBBox "+ FontBBox.DataStream
+		  s= s+ " /StemV "+ Fs(StemV)+ " /CapHeight "+ Fs(CapHeight)+ " /XHeight "+ Fs(xHeight)
+		  s= s+ " /Ascent "+ Fs(Ascent)+ " /Descent "+ Fs(Descent)
+		  
 		  If DBReportPDF.EmbeddedFonts Then
 		    s= s+ " /FontFile2 "+ FontFile.IndirectReference
 		  End
-		  s= s+ " /Ascent "+ Fs(Ascent)+ " /Descent "+ Fs(Descent)+ " /Leading "+ Fs(Leading)
-		  s= s+ " /MaxWidth "+ Fs(MaxWidth)+ " /AvgWidth "+ Fs(AvgWidth)+ " /ItalicAngle "+ Fs(ItalicAngle)
+		  
+		  's= s+ " /MissingWidth 255 /StemH "+ Fs(stemH)+ " /Leading "+ Fs(Leading)+ " /MaxWidth "+ Fs(MaxWidth)
+		  's= s+ " /AvgWidth "+ Fs(AvgWidth)+ " /ItalicAngle "+ Fs(ItalicAngle)
 		  s= s+ " >>"
 		  
 		  Return s
@@ -57,6 +59,10 @@ Inherits DBReportPDFObject
 
 	#tag Property, Flags = &h0
 		AvgWidth As Double
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		BaseFont As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -144,7 +150,7 @@ Inherits DBReportPDFObject
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		StemV As Double = 80
+		StemV As Double = 87
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

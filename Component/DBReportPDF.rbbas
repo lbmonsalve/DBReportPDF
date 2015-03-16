@@ -6,6 +6,10 @@ Protected Class DBReportPDF
 		  
 		  If Not f.Directory Then Return
 		  
+		  For i As Integer= 0 To DBReportPDFFont.FontFolders.Ubound
+		    If DBReportPDFFont.FontFolders(i).URLPath= f.URLPath Then Return
+		  Next
+		  
 		  DBReportPDFFont.FontFolders.Append f
 		End Sub
 	#tag EndMethod
@@ -1193,7 +1197,7 @@ Protected Class DBReportPDF
 
 
 	#tag Note, Name = Readme
-		DBReportPDF v0.2.1514
+		DBReportPDF v0.2.1515
 		
 		Based on pdfFile by Toby W. Rush and rsfpdf from https://github.com/roblthegreat/rsfpdf
 		
@@ -1201,10 +1205,11 @@ Protected Class DBReportPDF
 		
 		Version changelog:
 		
-		0.2.1514
+		0.2.1515
 		
 		* Add AddFontFolder.
 		- Fixed some messages on Adobe reader.
+		- Fixed fonts true type on windows objs.
 		
 		0.2.1510
 		

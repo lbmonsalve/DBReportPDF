@@ -197,12 +197,6 @@ Inherits DBReportPDFObject
 		Private Sub LoadFontInfoWinTTC(f As FolderItem)
 		  #pragma BackgroundTasks false // to speed up
 		  
-		  #if not DebugBuild then // to speed up
-		    #pragma BoundsChecking false
-		    #pragma NilObjectChecking false
-		    #pragma StackOverflowChecking false
-		  #endif
-		  
 		  Dim ReadStream as BinaryStream = BinaryStream.Open(f, False)
 		  
 		  Dim tag As String= ReadStream.Read(4, Encodings.ASCII)
@@ -237,7 +231,7 @@ Inherits DBReportPDFObject
 		    #pragma StackOverflowChecking false
 		  #endif
 		  
-		  'If InStr(f.Name.Lowercase, "Arial")> 0 Then
+		  'If InStr(f.Name.Lowercase, "Cambria")> 0 Then
 		  'Dim xxx As Integer
 		  'End
 		  
@@ -251,16 +245,22 @@ Inherits DBReportPDFObject
 		  Dim postTable As FontPostScriptTable
 		  Dim GlyphWidths() As Integer
 		  Dim CharacterWidths() As Integer
-		  Dim isSerif, isScript, isSymbolic As Boolean
+		  Dim isBold, isItalic, isSerif, isScript, isSymbolic As Boolean
 		  
-		  'reads the Offset Table:
+		  // reads the Offset Table:
 		  ReadStream.Position= offsetFile+ 4
 		  NumberOfTables= ReadStream.ReadShort
+		  
+		  If NumberOfTables< 7 Then
+		    ReadStream.Close
+		    Return
+		  End
+		  
 		  SearchRange= ReadStream.ReadShort
 		  EntrySelector= ReadStream.ReadShort
 		  RangeShift= ReadStream.ReadShort
 		  
-		  'reads a Directory Table:
+		  // reads a Directory Table:
 		  Dim directoryTables As New Dictionary
 		  Dim dtTemp As FontDirectoryTable
 		  
@@ -273,7 +273,7 @@ Inherits DBReportPDFObject
 		    directoryTables.Value(dtTemp.Tag)= dtTemp
 		  Next
 		  
-		  'reads the Names Table:
+		  // reads the Names Table:
 		  If directoryTables.HasKey("name") Then
 		    dtTemp= directoryTables.Value("name")
 		    ReadStream.Position= dtTemp.Offset+ 2
@@ -325,12 +325,7 @@ Inherits DBReportPDFObject
 		    Return
 		  End
 		  
-		  'If FontName.Trim= "" And FamilyName.Trim= "" Then
-		  'ReadStream.Close
-		  'Return
-		  'End If
-		  
-		  'reads the FontHeader Table:
+		  // reads the FontHeader Table:
 		  If directoryTables.HasKey("head") Then
 		    dtTemp= directoryTables.Value("head")
 		    ReadStream.Position= dtTemp.Offset+ 16
@@ -347,7 +342,7 @@ Inherits DBReportPDFObject
 		    Return
 		  End
 		  
-		  'reads the HorizontalHeader Table
+		  // reads the HorizontalHeader Table
 		  If directoryTables.HasKey("hhea") Then
 		    dtTemp= directoryTables.Value("hhea")
 		    ReadStream.Position= dtTemp.Offset+ 4
@@ -367,7 +362,7 @@ Inherits DBReportPDFObject
 		    Return
 		  End
 		  
-		  'reads the OS Table:
+		  // reads the OS Table:
 		  If directoryTables.HasKey("os/2") Or directoryTables.HasKey("OS/2") Then
 		    Dim key As String
 		    If directoryTables.HasKey("os/2") Then key= "os/2" Else key= "OS/2"
@@ -379,6 +374,7 @@ Inherits DBReportPDFObject
 		    Else
 		      ReadStream.Position= ReadStream.Position+ (2* 14)
 		    End
+		    
 		    Dim sFamilyClass As Integer=  ReadStream.ReadInt8
 		    If sFamilyClass> 0 And sFamilyClass<= 7 Then isSerif= True
 		    If sFamilyClass= 10 Then isScript= True
@@ -400,11 +396,11 @@ Inherits DBReportPDFObject
 		    Return
 		  End
 		  
-		  'reads the PostScript Table:
+		  // reads the PostScript Table:
 		  If directoryTables.HasKey("post") Then
 		    dtTemp= directoryTables.Value("post")
 		    ReadStream.Position= dtTemp.Offset+ 4
-		    Dim mantissa As Int16= ReadStream.ReadShort
+		    Dim mantissa As Integer= ReadStream.ReadShort
 		    Dim fraction As Integer= ReadStream.ReadUInt16
 		    postTable.ItalicAngle= mantissa+ fraction / 16384.0
 		    postTable.UnderlinePosition= ReadStream.ReadShort
@@ -415,7 +411,7 @@ Inherits DBReportPDFObject
 		    Return
 		  End
 		  
-		  'reads the Glyph's Widths:
+		  // reads the Glyph's Widths:
 		  If directoryTables.HasKey("hmtx") Then
 		    dtTemp= directoryTables.Value("hmtx")
 		    ReadStream.Position= dtTemp.Offset
@@ -428,7 +424,7 @@ Inherits DBReportPDFObject
 		    Return
 		  End
 		  
-		  'reads the CMAP
+		  // reads the CMAP
 		  If directoryTables.HasKey("cmap") Then
 		    dtTemp= directoryTables.Value("cmap")
 		    ReadStream.Position= dtTemp.Offset+ 2
@@ -489,18 +485,17 @@ Inherits DBReportPDFObject
 		        
 		        For ii As Integer= 0 To seg- 1
 		          For jj As Integer= start(ii) To end0(ii)
-		            If jj<> &hFFFF Then
-		              If ro(ii)= 0 Then
-		                glyph= (jj + delta(ii)) And &hFFFF
-		              Else
-		                idx= ii+ ro(ii)/ 2- seg+ jj- start(ii)
-		                glyph = (glyphId(idx)+ delta(ii)) And &hFFFF
-		              End
-		              Dim glyphInfo(1) As Integer
-		              glyphInfo(0)= glyph
-		              If glyph<= GlyphWidths.Ubound- 1 Then glyphInfo(1)= GlyphWidths(glyphInfo(0)) Else glyphInfo(1)= 0
-		              returnCMAP.Value(jj)= glyphInfo
+		            If jj= &hFFFF Then Exit For jj
+		            If ro(ii)= 0 Then
+		              glyph= (jj + delta(ii)) And &hFFFF
+		            Else
+		              idx= ii+ ro(ii)/ 2- seg+ jj- start(ii)
+		              glyph = (glyphId(idx)+ delta(ii)) And &hFFFF
 		            End
+		            Dim glyphInfo(1) As Integer
+		            glyphInfo(0)= glyph
+		            If glyph<= GlyphWidths.Ubound- 1 Then glyphInfo(1)= GlyphWidths(glyphInfo(0)) Else glyphInfo(1)= 0
+		            returnCMAP.Value(jj)= glyphInfo
 		          Next
 		        Next
 		        
@@ -546,6 +541,10 @@ Inherits DBReportPDFObject
 		          Dim myMetric() As Integer= returnCMAP.Value(i)
 		          CharacterWidths.Append myMetric(1)
 		          If CharacterWidths.Ubound+ 1= LastChar- FirstChar+ 1 Then Exit For i
+		        ElseIf i< 32 Then
+		          CharacterWidths.Append GlyphWidths(0)
+		        ElseIf CharacterWidths.Ubound+ 1<= LastChar- FirstChar+ 1 Then
+		          CharacterWidths.Append 0
 		        End If
 		      Next
 		    End
@@ -554,19 +553,27 @@ Inherits DBReportPDFObject
 		    Return
 		  End
 		  
-		  // put in cache 
+		  Dim sMacStyle As String= Bin(headTable.macStyle)
+		  If FullName.InStr("Bold")> 0 Or Mid(sMacStyle, 1, 1)= "1" Then isBold= True
+		  If FullName.InStr("Italic")> 0 Or Mid(sMacStyle, 2, 1)= "1" Then isItalic= True
+		  
+		  // chk if found on array 
+		  For i As Integer= 0 To CacheFontInfoDescriptor.Ubound
+		    If CacheFontInfoDescriptor(i).FontName= FontName And CacheFontInfoDescriptor(i).isBold= isBold And _
+		      CacheFontInfoDescriptor(i).isItalic= isItalic Then
+		      ReadStream.Close
+		      Return
+		    End
+		  Next
+		  
+		  // put in cache
 		  Dim cacheD As New DBReportPDFFontDescriptor
 		  cacheD.FontName= FontName
 		  cacheD.FontFamily= FamilyName
 		  cacheD.FontNameOS= FullName
-		  Dim sMacStyle As String= Bin(headTable.macStyle)
-		  If FullName.InStr("Bold")> 0 Or Mid(sMacStyle, 1, 1)= "1" Then
-		    cacheD.isBold= True
-		    cacheD.isForceBold= True
-		  End
-		  If FullName.InStr("Italic")> 0 Or Mid(sMacStyle, 2, 1)= "1" Then
-		    cacheD.isItalic= True
-		  End
+		  cacheD.isBold= isBold
+		  cacheD.isForceBold= isBold
+		  cacheD.isItalic= isItalic
 		  cacheD.FontBBox= New DBReportPDFRect( (headTable.xMin* 1000/ headTable.unitsPerEm), _
 		  (headTable.yMin* 1000/ headTable.unitsPerEm), (headTable.xMax* 1000/ headTable.unitsPerEm), _
 		  (headTable.yMax* 1000/ headTable.unitsPerEm))
@@ -619,6 +626,7 @@ Inherits DBReportPDFObject
 		      
 		      If mFontFound Then
 		        FontDescriptor= New DBReportPDFFontDescriptor(FileRoot)
+		        FontDescriptor.BaseFont= ChkFontNameKey(cacheD.FontName, isBold, isItalic)
 		        FontDescriptor.FontName= cacheD.FontName
 		        FontDescriptor.FontFamily= cacheD.FontFamily
 		        FontDescriptor.FontNameOS= cacheD.FontNameOS
@@ -655,7 +663,7 @@ Inherits DBReportPDFObject
 		        FileRoot.CacheSetFontDescriptor key, FontDescriptor
 		        FileRoot.CacheSetFontWidths key, FontWidths
 		        
-		        Me.BaseFont= ChkFontNameKey(FontDescriptor.FontName, isBold, isItalic) //change orignal name to name of file
+		        Me.BaseFont= FontDescriptor.BaseFont //change orignal name to name of file
 		        Exit For
 		      End
 		    End
@@ -689,6 +697,7 @@ Inherits DBReportPDFObject
 		    
 		    If mFontFound Then
 		      FontDescriptor= New DBReportPDFFontDescriptor(FileRoot)
+		      FontDescriptor.BaseFont= ChkFontNameKey(cacheD.FontName, isBold, isItalic)
 		      FontDescriptor.FontName= cacheD.FontName
 		      FontDescriptor.FontFamily= cacheD.FontFamily
 		      FontDescriptor.FontNameOS= cacheD.FontNameOS
@@ -725,7 +734,7 @@ Inherits DBReportPDFObject
 		      FileRoot.CacheSetFontDescriptor key, FontDescriptor
 		      FileRoot.CacheSetFontWidths key, FontWidths
 		      
-		      Me.BaseFont= ChkFontNameKey(FontDescriptor.FontName, isBold, isItalic) //change orignal name to name of file
+		      Me.BaseFont= FontDescriptor.BaseFont //change orignal name to name of file
 		    End If
 		    
 		  End
@@ -760,7 +769,7 @@ Inherits DBReportPDFObject
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		FirstChar As Integer = 32
+		FirstChar As Integer = 0
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

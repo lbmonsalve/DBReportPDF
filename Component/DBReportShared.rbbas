@@ -117,9 +117,9 @@ Protected Module DBReportShared
 
 
 	#tag Constant, Name = kzlibPath, Type = String, Dynamic = False, Default = \"", Scope = Protected
-		#Tag Instance, Platform = -, Language = Default, Definition  = \"/usr/lib/libz.dylib"
-		#Tag Instance, Platform = Mac OS, Language = Default, Definition  = \"ZLIB1.DLL"
-		#Tag Instance, Platform = Mac Classic, Language = Default, Definition  = \"/usr/lib/libz.so.1"
+		#Tag Instance, Platform = Mac OS, Language = Default, Definition  = \"/usr/lib/libz.dylib"
+		#Tag Instance, Platform = Windows, Language = Default, Definition  = \"ZLIB1.DLL"
+		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"/usr/lib/libz.so.1"
 	#tag EndConstant
 
 	#tag Constant, Name = Z_BUF_ERROR, Type = Double, Dynamic = False, Default = \"-5", Scope = Private
