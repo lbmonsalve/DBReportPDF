@@ -1197,13 +1197,17 @@ Protected Class DBReportPDF
 
 
 	#tag Note, Name = Readme
-		DBReportPDF v0.2.1515
+		DBReportPDF v0.2.1614
 		
 		Based on pdfFile by Toby W. Rush and rsfpdf from https://github.com/roblthegreat/rsfpdf
 		
 		by Bernardo Monsalve Copyright © 2014-2015 Bernardo Monsalve. All rights reserved.
 		
 		Version changelog:
+		
+		0.2.1614
+		
+		- Fixed ReadShort, ReadLong; Deprecated on Xojo 2015r2.
 		
 		0.2.1515
 		
@@ -1446,7 +1450,7 @@ Protected Class DBReportPDF
 	#tag Constant, Name = kPageWidth, Type = Double, Dynamic = False, Default = \"612", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.1510", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.1614", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = Z_BUF_ERROR, Type = Double, Dynamic = False, Default = \"-5", Scope = Private

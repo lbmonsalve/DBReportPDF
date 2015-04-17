@@ -168,10 +168,7 @@ Inherits DBReportPDFObject
 
 	#tag Method, Flags = &h21
 		Private Sub LoadFontInfoWin()
-		  If Not mFontFolderDefault Then
-		    FontFolders.Append SpecialFolder.Fonts
-		    mFontFolderDefault= True
-		  End If
+		  DBReportPDF.AddFontFolder SpecialFolder.Fonts
 		  
 		  For i As Integer= 0 To FontFolders.Ubound
 		    Dim fFonts As FolderItem= FontFolders(i)
@@ -197,7 +194,7 @@ Inherits DBReportPDFObject
 		Private Sub LoadFontInfoWinTTC(f As FolderItem)
 		  #pragma BackgroundTasks false // to speed up
 		  
-		  Dim ReadStream as BinaryStream = BinaryStream.Open(f, False)
+		  Dim ReadStream As BinaryStream= BinaryStream.Open(f, False)
 		  
 		  Dim tag As String= ReadStream.Read(4, Encodings.ASCII)
 		  
@@ -213,16 +210,16 @@ Inherits DBReportPDFObject
 		    offsets.Append offset
 		  Next
 		  
-		  ReadStream.Close
-		  
 		  For i As Integer= 0 To offsets.Ubound
-		    LoadFontInfoWinTTF f, offsets(i)
+		    LoadFontInfoWinTTF f, offsets(i), ReadStream
 		  Next
+		  
+		  ReadStream.Close
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub LoadFontInfoWinTTF(f As FolderItem, offsetFile As Int64 = 0)
+		Private Sub LoadFontInfoWinTTF(f As FolderItem, offsetFile As Int64 = 0, Optional streamFile As BinaryStream)
 		  #pragma BackgroundTasks false // to speed up
 		  
 		  #if not DebugBuild then // to speed up
@@ -235,45 +232,31 @@ Inherits DBReportPDFObject
 		  'Dim xxx As Integer
 		  'End
 		  
-		  Dim ReadStream as BinaryStream = BinaryStream.Open(f, False)
-		  
-		  Dim NumberOfTables, SearchRange, EntrySelector, RangeShift As Integer
-		  Dim FamilyName, FullName, FontName As String
-		  Dim headTable As FontHeaderTable
-		  Dim hheaTable As FontHorizontalHeaderTable
-		  Dim sTypoAscender, sTypoDescender, sCapHeight, sxHeight As Integer
-		  Dim postTable As FontPostScriptTable
-		  Dim GlyphWidths() As Integer
-		  Dim CharacterWidths() As Integer
-		  Dim isBold, isItalic, isSerif, isScript, isSymbolic As Boolean
+		  Dim ReadStream As BinaryStream
+		  If offsetFile= 0 Then ReadStream= BinaryStream.Open(f, False) Else ReadStream= streamFile
 		  
 		  // reads the Offset Table:
 		  ReadStream.Position= offsetFile+ 4
-		  NumberOfTables= ReadStream.ReadShort
+		  Dim NumberOfTables As Integer= ReadStream.ReadInt16
 		  
-		  If NumberOfTables< 7 Then
-		    ReadStream.Close
-		    Return
-		  End
-		  
-		  SearchRange= ReadStream.ReadShort
-		  EntrySelector= ReadStream.ReadShort
-		  RangeShift= ReadStream.ReadShort
+		  If NumberOfTables< 7 Then Return
 		  
 		  // reads a Directory Table:
+		  ReadStream.Position= ReadStream.Position+ 6
 		  Dim directoryTables As New Dictionary
 		  Dim dtTemp As FontDirectoryTable
 		  
 		  ReadStream.Position= offsetFile+ 12
 		  For i As Integer= 1 To NumberOfTables
 		    dtTemp.Tag= ReadStream.Read(4, Encodings.ASCII)
-		    dtTemp.Checksum= ReadStream.ReadLong
-		    dtTemp.Offset= ReadStream.ReadLong
-		    dtTemp.Length= ReadStream.ReadLong
+		    dtTemp.Checksum= ReadStream.ReadInt32
+		    dtTemp.Offset= ReadStream.ReadInt32
+		    dtTemp.Length= ReadStream.ReadInt32
 		    directoryTables.Value(dtTemp.Tag)= dtTemp
 		  Next
 		  
 		  // reads the Names Table:
+		  Dim FamilyName, FullName, FontName As String
 		  If directoryTables.HasKey("name") Then
 		    dtTemp= directoryTables.Value("name")
 		    ReadStream.Position= dtTemp.Offset+ 2
@@ -281,16 +264,16 @@ Inherits DBReportPDFObject
 		    Dim platformID, platformEncodingID, languageID, nameID, length, offset, currentStreamPosition, i As Integer
 		    Dim founded As Boolean
 		    
-		    Dim numTablesName As Integer= ReadStream.ReadShort
-		    Dim startOffset As Integer= ReadStream.ReadShort
+		    Dim numTablesName As Integer= ReadStream.ReadInt16
+		    Dim startOffset As Integer= ReadStream.ReadInt16
 		    
 		    While i< numTablesName And Not founded
-		      platformID= ReadStream.ReadShort
-		      platformEncodingID= ReadStream.ReadShort
-		      languageID= ReadStream.ReadShort
-		      nameID= ReadStream.ReadShort
-		      length= ReadStream.ReadShort
-		      offset= ReadStream.ReadShort
+		      platformID= ReadStream.ReadInt16
+		      platformEncodingID= ReadStream.ReadInt16
+		      languageID= ReadStream.ReadInt16
+		      nameID= ReadStream.ReadInt16
+		      length= ReadStream.ReadInt16
+		      offset= ReadStream.ReadInt16
 		      currentStreamPosition= ReadStream.Position
 		      ReadStream.Position= dtTemp.Offset+ startOffset+ offset
 		      Select Case nameID
@@ -321,48 +304,62 @@ Inherits DBReportPDFObject
 		      End
 		    Wend
 		  Else
-		    ReadStream.Close
 		    Return
 		  End
 		  
 		  // reads the FontHeader Table:
+		  Dim headTable As FontHeaderTable
 		  If directoryTables.HasKey("head") Then
 		    dtTemp= directoryTables.Value("head")
 		    ReadStream.Position= dtTemp.Offset+ 16
 		    headTable.flags= ReadStream.ReadUInt16
 		    headTable.unitsPerEm= ReadStream.ReadUInt16
 		    ReadStream.Position= ReadStream.Position+ 16
-		    headTable.xMin= ReadStream.ReadShort
-		    headTable.yMin= ReadStream.ReadShort
-		    headTable.xMax= ReadStream.ReadShort
-		    headTable.yMax= ReadStream.ReadShort
+		    headTable.xMin= ReadStream.ReadInt16
+		    headTable.yMin= ReadStream.ReadInt16
+		    headTable.xMax= ReadStream.ReadInt16
+		    headTable.yMax= ReadStream.ReadInt16
 		    headTable.macStyle= ReadStream.ReadUInt16
 		  Else
-		    ReadStream.Close
 		    Return
 		  End
 		  
+		  Dim isBold, isItalic As Boolean
+		  Dim sMacStyle As String= Bin(headTable.macStyle)
+		  If FullName.InStr("Bold")> 0 Or Mid(sMacStyle, 1, 1)= "1" Then isBold= True
+		  If FullName.InStr("Italic")> 0 Or Mid(sMacStyle, 2, 1)= "1" Then isItalic= True
+		  
+		  // chk if found on array
+		  For i As Integer= 0 To CacheFontInfoDescriptor.Ubound
+		    If CacheFontInfoDescriptor(i).FontName= FontName And CacheFontInfoDescriptor(i).isBold= isBold And _
+		      CacheFontInfoDescriptor(i).isItalic= isItalic Then
+		      Return
+		    End
+		  Next
+		  
 		  // reads the HorizontalHeader Table
+		  Dim hheaTable As FontHorizontalHeaderTable
 		  If directoryTables.HasKey("hhea") Then
 		    dtTemp= directoryTables.Value("hhea")
 		    ReadStream.Position= dtTemp.Offset+ 4
-		    hheaTable.Ascender= ReadStream.ReadShort
-		    hheaTable.Descender=ReadStream.ReadShort
-		    hheaTable.LineGap= ReadStream.ReadShort
+		    hheaTable.Ascender= ReadStream.ReadInt16
+		    hheaTable.Descender=ReadStream.ReadInt16
+		    hheaTable.LineGap= ReadStream.ReadInt16
 		    hheaTable.advanceWidthMax= ReadStream.ReadUInt16
-		    hheaTable.minLeftSideBearing= ReadStream.ReadShort
-		    hheaTable.minRightSideBearing= ReadStream.ReadShort
-		    hheaTable.xMaxExtent= ReadStream.ReadShort
-		    hheaTable.caretSlopeRise= ReadStream.ReadShort
-		    hheaTable.caretSlopeRun= ReadStream.ReadShort
+		    hheaTable.minLeftSideBearing= ReadStream.ReadInt16
+		    hheaTable.minRightSideBearing= ReadStream.ReadInt16
+		    hheaTable.xMaxExtent= ReadStream.ReadInt16
+		    hheaTable.caretSlopeRise= ReadStream.ReadInt16
+		    hheaTable.caretSlopeRun= ReadStream.ReadInt16
 		    ReadStream.Position= ReadStream.Position+ 12
 		    hheaTable.numberOfHMetrics= ReadStream.ReadUInt16
 		  Else
-		    ReadStream.Close
 		    Return
 		  End
 		  
 		  // reads the OS Table:
+		  Dim isSerif, isScript, isSymbolic As Boolean
+		  Dim sTypoAscender, sTypoDescender, sCapHeight, sxHeight As Integer
 		  If directoryTables.HasKey("os/2") Or directoryTables.HasKey("OS/2") Then
 		    Dim key As String
 		    If directoryTables.HasKey("os/2") Then key= "os/2" Else key= "OS/2"
@@ -381,37 +378,37 @@ Inherits DBReportPDFObject
 		    If sFamilyClass= 12 Then isSymbolic= True
 		    
 		    ReadStream.Position= ReadStream.Position+ 10+ 16+ 4+ 6+ 1
-		    sTypoAscender= ReadStream.ReadShort
-		    sTypoDescender= ReadStream.ReadShort
+		    sTypoAscender= ReadStream.ReadInt16
+		    sTypoDescender= ReadStream.ReadInt16
 		    
 		    ReadStream.Position= ReadStream.Position+ 14
 		    If osVersion> 1 Then
-		      sxHeight= ReadStream.ReadShort
-		      sCapHeight= ReadStream.ReadShort
+		      sxHeight= ReadStream.ReadInt16
+		      sCapHeight= ReadStream.ReadInt16
 		    Else
 		      sCapHeight= sTypoAscender
 		    End
 		  Else
-		    ReadStream.Close
 		    Return
 		  End
 		  
 		  // reads the PostScript Table:
+		  Dim postTable As FontPostScriptTable
 		  If directoryTables.HasKey("post") Then
 		    dtTemp= directoryTables.Value("post")
 		    ReadStream.Position= dtTemp.Offset+ 4
-		    Dim mantissa As Integer= ReadStream.ReadShort
+		    Dim mantissa As Integer= ReadStream.ReadInt16
 		    Dim fraction As Integer= ReadStream.ReadUInt16
 		    postTable.ItalicAngle= mantissa+ fraction / 16384.0
-		    postTable.UnderlinePosition= ReadStream.ReadShort
-		    postTable.UnderlineThickness= ReadStream.ReadShort
-		    postTable.IsFixedPitch= (ReadStream.ReadShort<> 0)
+		    postTable.UnderlinePosition= ReadStream.ReadInt16
+		    postTable.UnderlineThickness= ReadStream.ReadInt16
+		    postTable.IsFixedPitch= (ReadStream.ReadInt16<> 0)
 		  Else
-		    ReadStream.Close
 		    Return
 		  End
 		  
 		  // reads the Glyph's Widths:
+		  Dim GlyphWidths() As Integer
 		  If directoryTables.HasKey("hmtx") Then
 		    dtTemp= directoryTables.Value("hmtx")
 		    ReadStream.Position= dtTemp.Offset
@@ -420,11 +417,11 @@ Inherits DBReportPDFObject
 		      ReadStream.Position= ReadStream.Position+ 2
 		    Next
 		  Else
-		    ReadStream.Close
 		    Return
 		  End
 		  
 		  // reads the CMAP
+		  Dim CharacterWidths() As Integer
 		  If directoryTables.HasKey("cmap") Then
 		    dtTemp= directoryTables.Value("cmap")
 		    ReadStream.Position= dtTemp.Offset+ 2
@@ -445,11 +442,12 @@ Inherits DBReportPDFObject
 		      format= ReadStream.ReadUInt16
 		      
 		      If cmaps(i).PlatformID= 3 And cmaps(i).EncodingID= 1 And format= 4 Then // MS-Unicode-CMAP is used for priority
+		        
 		        Dim table_lenght As Integer= ReadStream.ReadUInt16
 		        ReadStream.Position= ReadStream.Position+ 2
 		        Dim seg As Integer= ReadStream.ReadUInt16/ 2
-		        ReadStream.Position= ReadStream.Position+ 6
 		        
+		        ReadStream.Position= ReadStream.Position+ 6
 		        Dim end0() As Integer
 		        ReDim end0(seg)
 		        For ii As Integer= 0 To seg- 1
@@ -476,8 +474,9 @@ Inherits DBReportPDFObject
 		        Next
 		        
 		        Dim glyphId() As Integer
-		        ReDim  glyphId(table_lenght/ 2- 8- seg* 4)
-		        For ii As Integer= 0 To glyphId.Ubound
+		        Dim glyphIdUbound As Integer= table_lenght/ 2- 8- seg* 4
+		        ReDim  glyphId(glyphIdUbound)
+		        For ii As Integer= 0 To glyphIdUbound
 		          glyphId(ii)= ReadStream.ReadUInt16
 		        Next
 		        
@@ -532,7 +531,6 @@ Inherits DBReportPDFObject
 		          cmaps(i).Mapping= returnCMAP
 		        End If
 		      Next
-		      
 		    End If
 		    
 		    If returnCMAP.Count> 0 Then // here!!
@@ -549,22 +547,8 @@ Inherits DBReportPDFObject
 		      Next
 		    End
 		  Else
-		    ReadStream.Close
 		    Return
 		  End
-		  
-		  Dim sMacStyle As String= Bin(headTable.macStyle)
-		  If FullName.InStr("Bold")> 0 Or Mid(sMacStyle, 1, 1)= "1" Then isBold= True
-		  If FullName.InStr("Italic")> 0 Or Mid(sMacStyle, 2, 1)= "1" Then isItalic= True
-		  
-		  // chk if found on array 
-		  For i As Integer= 0 To CacheFontInfoDescriptor.Ubound
-		    If CacheFontInfoDescriptor(i).FontName= FontName And CacheFontInfoDescriptor(i).isBold= isBold And _
-		      CacheFontInfoDescriptor(i).isItalic= isItalic Then
-		      ReadStream.Close
-		      Return
-		    End
-		  Next
 		  
 		  // put in cache
 		  Dim cacheD As New DBReportPDFFontDescriptor
@@ -600,7 +584,7 @@ Inherits DBReportPDFObject
 		  End
 		  CacheFontInfoWidths.Append cacheFW
 		  
-		  ReadStream.Close
+		  If offsetFile= 0 Then ReadStream.Close
 		End Sub
 	#tag EndMethod
 
@@ -798,10 +782,6 @@ Inherits DBReportPDFObject
 
 	#tag Property, Flags = &h0
 		LastChar As Integer = 255
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private Shared mFontFolderDefault As Boolean
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
