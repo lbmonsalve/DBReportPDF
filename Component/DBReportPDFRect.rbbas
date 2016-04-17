@@ -91,22 +91,9 @@ Protected Class DBReportPDFRect
 
 	#tag ViewBehavior
 		#tag ViewProperty
-			Name="Bottom"
-			Group="Behavior"
-			Type="Integer"
-			InheritedFrom="REALbasic.Rect"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Height"
 			Group="Behavior"
 			Type="Integer"
-			InheritedFrom="REALbasic.Rect"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="HorizontalCenter"
-			Group="Behavior"
-			Type="Double"
-			InheritedFrom="REALbasic.Rect"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
@@ -129,12 +116,6 @@ Protected Class DBReportPDFRect
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Right"
-			Group="Behavior"
-			Type="Integer"
-			InheritedFrom="REALbasic.Rect"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
@@ -148,16 +129,9 @@ Protected Class DBReportPDFRect
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="VerticalCenter"
-			Group="Behavior"
-			Type="Double"
-			InheritedFrom="REALbasic.Rect"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Width"
 			Group="Behavior"
 			Type="Integer"
-			InheritedFrom="REALbasic.Rect"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

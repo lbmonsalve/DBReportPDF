@@ -170,6 +170,11 @@ Inherits DBReportPDFObject
 			Type="Double"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="BaseFont"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="ByteOffset"
 			Group="Behavior"
 			Type="Integer"

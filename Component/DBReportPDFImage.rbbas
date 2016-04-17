@@ -3,6 +3,11 @@ Protected Class DBReportPDFImage
 Inherits DBReportPDFXObject
 	#tag Method, Flags = &h1000
 		Sub Constructor(root As DBReportPDF, pdfReferenceName As String, whichImage as picture, sourceX as integer, sourceY as integer, sourceWidth as integer, sourceHeight as integer, pictureQuality As Integer)
+		  #pragma Unused sourceX
+		  #pragma Unused sourceY
+		  #pragma Unused sourceWidth
+		  #pragma Unused sourceHeight
+		  
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor
 		  
@@ -44,7 +49,7 @@ Inherits DBReportPDFXObject
 		  ' Calculate the scale ratio
 		  Dim ratio As Double = Min( maxHeight/p.Height, maxWidth/p.Width)
 		  ' Create a new picture to return
-		  Dim newPic As New Picture( p.Width* ratio, p.Height* ratio )
+		  Dim newPic As New Picture( p.Width* ratio, p.Height* ratio, 32)
 		  ' background white
 		  newPic.Graphics.ForeColor= &cFFFFFF00
 		  newPic.Graphics.FillRect 0, 0, newPic.Width, newPic.Height
@@ -129,13 +134,6 @@ Inherits DBReportPDFXObject
 			Group="Behavior"
 			Type="Integer"
 			InheritedFrom="DBReportPDFObject"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="PictureQuality"
-			Group="Behavior"
-			InitialValue="80"
-			Type="Integer"
-			InheritedFrom="DBReportPDFXObject"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

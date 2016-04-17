@@ -29,7 +29,7 @@ Inherits DBReportPDFObject
 
 	#tag Method, Flags = &h0
 		Function GetData() As String
-		  Dim s, filter As String
+		  Dim s As String
 		  
 		  s= CompileContentsStream
 		  

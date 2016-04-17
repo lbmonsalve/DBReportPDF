@@ -332,83 +332,108 @@ Protected Class DBReportPDF
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub DrawTextArea(texta As TextArea, x As Double, y As Double, width As Double, height As Double = - 1)
-		  If texta.Text= "" Then Return
-		  
-		  #pragma BackgroundTasks false // to speed up
-		  
-		  Dim st As StyledText= texta.StyledText
-		  Dim stylesCount As Integer= st.StyleRunCount- 1
-		  Dim sr As StyleRun
-		  Dim fontRef, s As String
-		  Dim CR As String= EndOfLine.Windows
-		  Dim gtextHeight As Double
-		  Dim currentLeft As Double= x
-		  Dim currentBaseline As Double= mPageHeight- y
-		  Dim currentMarginBottom As Double
-		  Dim currentColor As Color= &cFFFFFFFF
-		  Dim currentAlignment As Integer= -1
-		  Dim currentLine As String
-		  Dim currentLineNumber As Integer= 0
-		  Dim lineFeed As Boolean= True
-		  
-		  Static p As Picture
-		  If p= Nil Then p= New Picture(1, 1, 1)
-		  Dim g As Graphics= p.Graphics
-		  
-		  // ini calc maxTextHeight TODO: calc left ini for center and right align
-		  Dim dTextH As Dictionary= New Dictionary // height of line
-		  Dim dTextW As Dictionary= New Dictionary // width of line
-		  Dim dTextL As Dictionary= New Dictionary // left of line
-		  For i As Integer= 0 To stylesCount
-		    sr= st.StyleRun(i)
+		Sub DrawTextArea(texta As Object, x As Double, y As Double, width As Double, height As Double = - 1)
+		  #if TargetConsole
+		    #pragma Unused texta
+		    #pragma Unused x
+		    #pragma Unused y
+		    #pragma Unused width
+		    #pragma Unused height
+		  #else
+		    Dim txtArea As TextArea= TextArea(texta)
 		    
-		    g.TextFont= sr.Font // "Arial"
-		    g.TextSize= sr.Size
-		    g.Bold= sr.Bold
-		    g.Italic= sr.Italic
-		    gTextHeight= g.TextHeight
+		    If txtArea.Text= "" Then Return
 		    
-		    Dim t As String= ReplaceLineEndings(sr.Text, EndOfLine.Macintosh)
-		    Dim n As Integer= CountFields(t, EndOfLine.Macintosh)
+		    #pragma BackgroundTasks false // to speed up
 		    
-		    For j As Integer= 1 To n
-		      currentLine= NthField(t, EndOfLine.Macintosh, j)
-		      If currentLine= "" And j<> n Then // just endofline
-		        currentLineNumber= currentLineNumber+ 1
-		        dTextH.Value(currentLineNumber)= gTextHeight
-		        dTextW.Value(currentLineNumber)= 0
-		        Continue
-		      End If
+		    Dim st As StyledText= txtArea.StyledText
+		    Dim stylesCount As Integer= st.StyleRunCount- 1
+		    Dim sr As StyleRun
+		    Dim fontRef, s As String
+		    Dim CR As String= EndOfLine.Windows
+		    Dim gtextHeight As Double
+		    Dim currentLeft As Double= x
+		    Dim currentBaseline As Double= mPageHeight- y
+		    Dim currentMarginBottom As Double
+		    Dim currentColor As Color= &cFFFFFFFF
+		    Dim currentAlignment As Integer= -1
+		    Dim currentLine As String
+		    Dim currentLineNumber As Integer= 0
+		    Dim lineFeed As Boolean= True
+		    
+		    Static p As Picture
+		    If p= Nil Then p= New Picture(1, 1, 1)
+		    Dim g As Graphics= p.Graphics
+		    
+		    // ini calc maxTextHeight TODO: calc left ini for center and right align
+		    Dim dTextH As Dictionary= New Dictionary // height of line
+		    Dim dTextW As Dictionary= New Dictionary // width of line
+		    Dim dTextL As Dictionary= New Dictionary // left of line
+		    For i As Integer= 0 To stylesCount
+		      sr= st.StyleRun(i)
 		      
-		      If lineFeed Then
-		        currentLineNumber= currentLineNumber+ 1
-		        lineFeed= False
-		      End If
+		      g.TextFont= sr.Font // "Arial"
+		      g.TextSize= sr.Size
+		      g.Bold= sr.Bold
+		      g.Italic= sr.Italic
+		      gTextHeight= g.TextHeight
 		      
-		      If (currentLeft+ g.StringWidth(currentLine))<= (x+ width) Then // one line
-		        If dTextH.HasKey(currentLineNumber) Then
-		          Dim tTextHeight As Double= dTextH.Value(currentLineNumber)
-		          If gTextHeight> tTextHeight Then dTextH.Value(currentLineNumber)= gTextHeight
-		        Else
+		      Dim t As String= ReplaceLineEndings(sr.Text, EndOfLine.Macintosh)
+		      Dim n As Integer= CountFields(t, EndOfLine.Macintosh)
+		      
+		      For j As Integer= 1 To n
+		        currentLine= NthField(t, EndOfLine.Macintosh, j)
+		        If currentLine= "" And j<> n Then // just endofline
+		          currentLineNumber= currentLineNumber+ 1
 		          dTextH.Value(currentLineNumber)= gTextHeight
+		          dTextW.Value(currentLineNumber)= 0
+		          Continue
 		        End If
-		        If dTextW.HasKey(currentLineNumber) Then
-		          Dim tTextW As Double= dTextW.Value(currentLineNumber)
-		          dTextW.Value(currentLineNumber)= tTextW+ g.StringWidth(currentLine)
-		        Else
-		          dTextW.Value(currentLineNumber)= g.StringWidth(currentLine)
-		        End If
-		        dTextL.Value(i)= currentLeft- x
-		      Else
-		        Dim words() As String= currentLine.Split(" ")
-		        currentLine= ""
 		        
-		        While Ubound(words)> -1
-		          If (currentLeft+ g.StringWidth(currentLine+ words(0)))<= (x+ width) Then
-		            If currentLine= "" Then currentLine= words(0) Else currentLine= currentLine+ " "+ words(0)
-		            words.Remove 0
-		            If Ubound(words)= -1 Then
+		        If lineFeed Then
+		          currentLineNumber= currentLineNumber+ 1
+		          lineFeed= False
+		        End If
+		        
+		        If (currentLeft+ g.StringWidth(currentLine))<= (x+ width) Then // one line
+		          If dTextH.HasKey(currentLineNumber) Then
+		            Dim tTextHeight As Double= dTextH.Value(currentLineNumber)
+		            If gTextHeight> tTextHeight Then dTextH.Value(currentLineNumber)= gTextHeight
+		          Else
+		            dTextH.Value(currentLineNumber)= gTextHeight
+		          End If
+		          If dTextW.HasKey(currentLineNumber) Then
+		            Dim tTextW As Double= dTextW.Value(currentLineNumber)
+		            dTextW.Value(currentLineNumber)= tTextW+ g.StringWidth(currentLine)
+		          Else
+		            dTextW.Value(currentLineNumber)= g.StringWidth(currentLine)
+		          End If
+		          dTextL.Value(i)= currentLeft- x
+		        Else
+		          Dim words() As String= currentLine.Split(" ")
+		          currentLine= ""
+		          
+		          While Ubound(words)> -1
+		            If (currentLeft+ g.StringWidth(currentLine+ words(0)))<= (x+ width) Then
+		              If currentLine= "" Then currentLine= words(0) Else currentLine= currentLine+ " "+ words(0)
+		              words.Remove 0
+		              If Ubound(words)= -1 Then
+		                If dTextW.HasKey(currentLineNumber) Then
+		                  Dim tTextW As Double= dTextW.Value(currentLineNumber)
+		                  dTextW.Value(currentLineNumber)= tTextW+ g.StringWidth(currentLine)
+		                Else
+		                  dTextW.Value(currentLineNumber)= g.StringWidth(currentLine)
+		                End If
+		                dTextL.Value(i)= currentLeft- x
+		              End If
+		            Else
+		              // TODO: chk for long word
+		              If dTextH.HasKey(currentLineNumber) Then
+		                Dim tTextHeight As Double= dTextH.Value(currentLineNumber)
+		                If gTextHeight> tTextHeight Then dTextH.Value(currentLineNumber)= gTextHeight
+		              Else
+		                dTextH.Value(currentLineNumber)= gTextHeight
+		              End If
 		              If dTextW.HasKey(currentLineNumber) Then
 		                Dim tTextW As Double= dTextW.Value(currentLineNumber)
 		                dTextW.Value(currentLineNumber)= tTextW+ g.StringWidth(currentLine)
@@ -416,293 +441,303 @@ Protected Class DBReportPDF
 		                dTextW.Value(currentLineNumber)= g.StringWidth(currentLine)
 		              End If
 		              dTextL.Value(i)= currentLeft- x
+		              
+		              currentLine= ""
+		              currentLeft= x
+		              currentLineNumber= currentLineNumber+ 1
 		            End If
-		          Else
-		            // TODO: chk for long word
-		            If dTextH.HasKey(currentLineNumber) Then
-		              Dim tTextHeight As Double= dTextH.Value(currentLineNumber)
-		              If gTextHeight> tTextHeight Then dTextH.Value(currentLineNumber)= gTextHeight
-		            Else
-		              dTextH.Value(currentLineNumber)= gTextHeight
-		            End If
-		            If dTextW.HasKey(currentLineNumber) Then
-		              Dim tTextW As Double= dTextW.Value(currentLineNumber)
-		              dTextW.Value(currentLineNumber)= tTextW+ g.StringWidth(currentLine)
-		            Else
-		              dTextW.Value(currentLineNumber)= g.StringWidth(currentLine)
-		            End If
-		            dTextL.Value(i)= currentLeft- x
-		            
-		            currentLine= ""
-		            currentLeft= x
-		            currentLineNumber= currentLineNumber+ 1
-		          End If
-		        Wend
-		      End If
-		      
-		      If j< n Then
-		        currentLeft= x
-		        lineFeed= True
-		      Else
-		        currentLeft= currentLeft+ g.StringWidth(currentLine)
-		      End If
+		          Wend
+		        End If
+		        
+		        If j< n Then
+		          currentLeft= x
+		          lineFeed= True
+		        Else
+		          currentLeft= currentLeft+ g.StringWidth(currentLine)
+		        End If
+		      Next
 		    Next
-		  Next
-		  currentLeft= x
-		  currentLineNumber= 0
-		  // end calc maxTextHeight
-		  
-		  lineFeed= True
-		  
-		  If height= -1 Then currentMarginBottom= 50 Else currentMarginBottom= mPageHeight- y- height
-		  
-		  s= "BT"+ CR // begin text block
-		  
-		  For i As Integer= 0 To stylesCount
-		    sr= st.StyleRun(i)
+		    currentLeft= x
+		    currentLineNumber= 0
+		    // end calc maxTextHeight
 		    
-		    fontRef= ObjectCatalog.Pages.GetFontReferenceName(sr.Font, sr.Bold, sr.Italic) // "Helvetica"
+		    lineFeed= True
 		    
-		    s= s+ "/"+ fontRef+ " "+ DBReportPDFObject.fs(sr.Size)+ " Tf"+ CR
+		    If height= -1 Then currentMarginBottom= 50 Else currentMarginBottom= mPageHeight- y- height
 		    
-		    If currentColor<> sr.TextColor Then
-		      currentColor= sr.TextColor
-		      s= s+ DBReportPDFContents.GetRGBTriplet(currentColor)+ " RG"+ CR // set stroking color
-		      s= s+ DBReportPDFContents.GetRGBTriplet(currentColor)+ " rg"+ CR // set non-stroking color
-		    End If
+		    s= "BT"+ CR // begin text block
 		    
-		    g.TextFont= sr.Font // "Arial"
-		    g.TextSize= sr.Size
-		    g.Bold= sr.Bold
-		    g.Italic= sr.Italic
-		    gtextHeight= g.TextHeight
-		    
-		    Dim t As String= ReplaceLineEndings(sr.Text, EndOfLine.Macintosh)
-		    Dim n As Integer= CountFields(t, EndOfLine.Macintosh)
-		    
-		    For j As Integer= 1 To n
-		      currentLine= NthField(t, EndOfLine.Macintosh, j)
-		      If currentLine= "" And j<> n Then // just endofline
-		        currentLineNumber= currentLineNumber+ 1
-		        If dTextH.HasKey(currentLineNumber) Then gTextHeight= dTextH.Value(currentLineNumber)
-		        currentBaseline= currentBaseline- gTextHeight
-		        If currentBaseline< currentMarginBottom Then
-		          s= s+ "ET"+ CR // end text blocl
-		          ObjectPageCurrent.AddTextBlock s
-		          NextPage
-		          s= "BT"+ CR // begin text block
-		          s= s+ "/"+ fontRef+ " "+ DBReportPDFObject.fs(sr.Size)+ " Tf"+ CR
-		          currentBaseline= mPageHeight- y
-		        End If
-		        currentLeft= x
-		        Continue
-		      End
+		    For i As Integer= 0 To stylesCount
+		      sr= st.StyleRun(i)
 		      
-		      If lineFeed Then
-		        currentLineNumber= currentLineNumber+ 1
-		        If dTextH.HasKey(currentLineNumber) Then gTextHeight= dTextH.Value(currentLineNumber)
-		        currentBaseline= currentBaseline- gTextHeight
-		        If currentBaseline< currentMarginBottom Then
-		          s= s+ "ET"+ CR // end text blocl
-		          ObjectPageCurrent.AddTextBlock s
-		          NextPage
-		          s= "BT"+ CR // begin text block
-		          s= s+ "/"+ fontRef+ " "+ DBReportPDFObject.fs(sr.Size)+ " Tf"+ CR
-		          currentBaseline= mPageHeight- y
-		        End If
-		        lineFeed= False
+		      fontRef= ObjectCatalog.Pages.GetFontReferenceName(sr.Font, sr.Bold, sr.Italic) // "Helvetica"
+		      
+		      s= s+ "/"+ fontRef+ " "+ DBReportPDFObject.fs(sr.Size)+ " Tf"+ CR
+		      
+		      If currentColor<> sr.TextColor Then
+		        currentColor= sr.TextColor
+		        s= s+ DBReportPDFContents.GetRGBTriplet(currentColor)+ " RG"+ CR // set stroking color
+		        s= s+ DBReportPDFContents.GetRGBTriplet(currentColor)+ " rg"+ CR // set non-stroking color
 		      End If
 		      
-		      // check the alignment using the Paragraph list
-		      Dim alignment As Integer= 0
-		      Dim pc As Integer= st.ParagraphCount- 1
-		      For pi As Integer= 0 To pc
-		        Dim pa As Paragraph= st.Paragraph(pi)
-		        'Dim ra As Range= st.StyleRunRange(i)
-		        'If pa.StartPos<= ra.StartPos Then
-		        '#if Not TargetLinux then
-		        'alignment= pa.Alignment
-		        '#endif
-		        'End
-		        Dim rn As DatabaseRecord= InStrRangeEOL(sr.Text, st.StyleRunRange(i), j)
-		        If rn.IntegerColumn("StartPos")>= pa.StartPos And rn.IntegerColumn("EndPos")<= pa.EndPos Then
-		          #if Not TargetLinux then
-		            alignment= pa.Alignment
-		            Exit For pi
-		          #endif
+		      g.TextFont= sr.Font // "Arial"
+		      g.TextSize= sr.Size
+		      g.Bold= sr.Bold
+		      g.Italic= sr.Italic
+		      gtextHeight= g.TextHeight
+		      
+		      Dim t As String= ReplaceLineEndings(sr.Text, EndOfLine.Macintosh)
+		      Dim n As Integer= CountFields(t, EndOfLine.Macintosh)
+		      
+		      For j As Integer= 1 To n
+		        currentLine= NthField(t, EndOfLine.Macintosh, j)
+		        If currentLine= "" And j<> n Then // just endofline
+		          currentLineNumber= currentLineNumber+ 1
+		          If dTextH.HasKey(currentLineNumber) Then gTextHeight= dTextH.Value(currentLineNumber)
+		          currentBaseline= currentBaseline- gTextHeight
+		          If currentBaseline< currentMarginBottom Then
+		            s= s+ "ET"+ CR // end text blocl
+		            ObjectPageCurrent.AddTextBlock s
+		            NextPage
+		            s= "BT"+ CR // begin text block
+		            s= s+ "/"+ fontRef+ " "+ DBReportPDFObject.fs(sr.Size)+ " Tf"+ CR
+		            currentBaseline= mPageHeight- y
+		          End If
+		          currentLeft= x
+		          Continue
 		        End
+		        
+		        If lineFeed Then
+		          currentLineNumber= currentLineNumber+ 1
+		          If dTextH.HasKey(currentLineNumber) Then gTextHeight= dTextH.Value(currentLineNumber)
+		          currentBaseline= currentBaseline- gTextHeight
+		          If currentBaseline< currentMarginBottom Then
+		            s= s+ "ET"+ CR // end text blocl
+		            ObjectPageCurrent.AddTextBlock s
+		            NextPage
+		            s= "BT"+ CR // begin text block
+		            s= s+ "/"+ fontRef+ " "+ DBReportPDFObject.fs(sr.Size)+ " Tf"+ CR
+		            currentBaseline= mPageHeight- y
+		          End If
+		          lineFeed= False
+		        End If
+		        
+		        // check the alignment using the Paragraph list
+		        Dim alignment As Integer= 0
+		        Dim pc As Integer= st.ParagraphCount- 1
+		        For pi As Integer= 0 To pc
+		          Dim pa As Paragraph= st.Paragraph(pi)
+		          'Dim ra As Range= st.StyleRunRange(i)
+		          'If pa.StartPos<= ra.StartPos Then
+		          '#if Not TargetLinux then
+		          'alignment= pa.Alignment
+		          '#endif
+		          'End
+		          Dim rn As DatabaseRecord= InStrRangeEOL(sr.Text, st.StyleRunRange(i), j)
+		          If rn.IntegerColumn("StartPos")>= pa.StartPos And rn.IntegerColumn("EndPos")<= pa.EndPos Then
+		            #if Not TargetLinux
+		              alignment= pa.Alignment
+		              Exit For pi
+		            #endif
+		          End
+		        Next
+		        
+		        // apply alignment
+		        If currentAlignment<> alignment Then
+		          currentAlignment= alignment
+		          currentLeft= x
+		        End if
+		        
+		        If (currentLeft+ g.StringWidth(currentLine))<= (x+ width) Then // one line
+		          
+		          // check alignment
+		          Select case alignment
+		          case TextArea.AlignCenter
+		            Dim tTextW As Double= dTextW.Value(currentLineNumber)
+		            Dim tTextL As Double= dTextL.Value(i)
+		            currentLeft= x+ ((width- tTextW)/ 2)+ tTextL // TODO: wrong g.StringWidth(currentLine)
+		          case TextArea.AlignRight
+		            Dim tTextW As Double= dTextW.Value(currentLineNumber)
+		            Dim tTextL As Double= dTextL.Value(i)
+		            currentLeft= x+ width- tTextW+ tTextL // TODO: wrong g.StringWidth(currentLine)
+		          else // Left
+		          end Select
+		          
+		          s= s+ "1 0 0 1 "+ DBReportPDFObject.fs(currentLeft)+ " "+ DBReportPDFObject.fs(currentBaseline)+ " Tm"+ CR
+		          s= s+ DBReportPDFObject.FormatLiteralString(currentLine)+ " Tj"+ CR
+		        Else // multiline
+		          Dim words() As String= currentLine.Split(" ")
+		          currentLine= ""
+		          
+		          While Ubound(words)> -1
+		            If (currentLeft+ g.StringWidth(currentLine+ words(0)))<= (x+ width) Then
+		              If currentLine= "" Then currentLine= words(0) Else currentLine= currentLine+ " "+ words(0)
+		              words.Remove 0
+		              If Ubound(words)= -1 Then
+		                s= s+ "1 0 0 1 "+ DBReportPDFObject.fs(currentLeft)+ " "+ DBReportPDFObject.fs(currentBaseline)+ " Tm"+ CR
+		                s= s+ DBReportPDFObject.FormatLiteralString(currentLine)+ " Tj"+ CR
+		              End If
+		            Else
+		              // TODO: chk for long word
+		              If alignment< 2 Then
+		                Dim jWords() As String= currentLine.Split(" ") // justified words
+		                Dim jWordsN As Integer= UBound(jWords)  // justified words number
+		                Dim jWordsWidth, jWordsSpace As Double
+		                For ji As Integer= 0 To jWordsN
+		                  jWordsWidth= jWordsWidth+ g.StringWidth(jWords(ji))
+		                Next
+		                jWordsSpace= (width- jWordsWidth)/ jWordsN
+		                For ji As Integer= 0 To jWordsN
+		                  s= s+ "1 0 0 1 "+ DBReportPDFObject.fs(currentLeft)+ " "+ DBReportPDFObject.fs(currentBaseline)+ " Tm"+ CR
+		                  s= s+ DBReportPDFObject.FormatLiteralString(jWords(ji))+ " Tj"+ CR
+		                  If ji< jWordsN Then currentLeft= currentLeft+ g.StringWidth(jWords(ji))+ jWordsSpace Else currentLeft= currentLeft+ g.StringWidth(jWords(ji))
+		                Next
+		              Else
+		                s= s+ "1 0 0 1 "+ DBReportPDFObject.fs(currentLeft)+ " "+ DBReportPDFObject.fs(currentBaseline)+ " Tm"+ CR
+		                s= s+ DBReportPDFObject.FormatLiteralString(currentLine)+ " Tj"+ CR
+		              End
+		              currentLine= ""
+		              currentLeft= x
+		              currentLineNumber= currentLineNumber+ 1
+		              If dTextH.HasKey(currentLineNumber) Then gTextHeight= dTextH.Value(currentLineNumber)
+		              currentBaseline= currentBaseline- gTextHeight
+		              If currentBaseline< currentMarginBottom Then
+		                s= s+ "ET"+ CR // end text blocl
+		                ObjectPageCurrent.AddTextBlock s
+		                NextPage
+		                s= "BT"+ CR // begin text block
+		                s= s+ "/"+ fontRef+ " "+ DBReportPDFObject.fs(sr.Size)+ " Tf"+ CR
+		                currentBaseline= mPageHeight- y
+		              End If
+		            End If
+		          Wend
+		        End If
+		        
+		        If j< n Then
+		          currentLeft= x
+		          lineFeed= True
+		        Else
+		          currentLeft= currentLeft+ g.StringWidth(currentLine)
+		        End If
+		        
 		      Next
 		      
-		      // apply alignment
-		      If currentAlignment<> alignment Then
-		        currentAlignment= alignment
-		        currentLeft= x
-		      End if
-		      
-		      If (currentLeft+ g.StringWidth(currentLine))<= (x+ width) Then // one line
-		        
-		        // check alignment
-		        Select case alignment
-		        case TextArea.AlignCenter
-		          Dim tTextW As Double= dTextW.Value(currentLineNumber)
-		          Dim tTextL As Double= dTextL.Value(i)
-		          currentLeft= x+ ((width- tTextW)/ 2)+ tTextL // TODO: wrong g.StringWidth(currentLine)
-		        case TextArea.AlignRight
-		          Dim tTextW As Double= dTextW.Value(currentLineNumber)
-		          Dim tTextL As Double= dTextL.Value(i)
-		          currentLeft= x+ width- tTextW+ tTextL // TODO: wrong g.StringWidth(currentLine)
-		        else // Left
-		        end Select
-		        
-		        s= s+ "1 0 0 1 "+ DBReportPDFObject.fs(currentLeft)+ " "+ DBReportPDFObject.fs(currentBaseline)+ " Tm"+ CR
-		        s= s+ DBReportPDFObject.FormatLiteralString(currentLine)+ " Tj"+ CR
-		      Else // multiline
-		        Dim words() As String= currentLine.Split(" ")
-		        currentLine= ""
-		        
-		        While Ubound(words)> -1
-		          If (currentLeft+ g.StringWidth(currentLine+ words(0)))<= (x+ width) Then
-		            If currentLine= "" Then currentLine= words(0) Else currentLine= currentLine+ " "+ words(0)
-		            words.Remove 0
-		            If Ubound(words)= -1 Then
-		              s= s+ "1 0 0 1 "+ DBReportPDFObject.fs(currentLeft)+ " "+ DBReportPDFObject.fs(currentBaseline)+ " Tm"+ CR
-		              s= s+ DBReportPDFObject.FormatLiteralString(currentLine)+ " Tj"+ CR
-		            End If
-		          Else
-		            // TODO: chk for long word
-		            If alignment< 2 Then
-		              Dim jWords() As String= currentLine.Split(" ") // justified words
-		              Dim jWordsN As Integer= UBound(jWords)  // justified words number
-		              Dim jWordsWidth, jWordsSpace As Double
-		              For ji As Integer= 0 To jWordsN
-		                jWordsWidth= jWordsWidth+ g.StringWidth(jWords(ji))
-		              Next
-		              jWordsSpace= (width- jWordsWidth)/ jWordsN
-		              For ji As Integer= 0 To jWordsN
-		                s= s+ "1 0 0 1 "+ DBReportPDFObject.fs(currentLeft)+ " "+ DBReportPDFObject.fs(currentBaseline)+ " Tm"+ CR
-		                s= s+ DBReportPDFObject.FormatLiteralString(jWords(ji))+ " Tj"+ CR
-		                If ji< jWordsN Then currentLeft= currentLeft+ g.StringWidth(jWords(ji))+ jWordsSpace Else currentLeft= currentLeft+ g.StringWidth(jWords(ji))
-		              Next
-		            Else
-		              s= s+ "1 0 0 1 "+ DBReportPDFObject.fs(currentLeft)+ " "+ DBReportPDFObject.fs(currentBaseline)+ " Tm"+ CR
-		              s= s+ DBReportPDFObject.FormatLiteralString(currentLine)+ " Tj"+ CR
-		            End
-		            currentLine= ""
-		            currentLeft= x
-		            currentLineNumber= currentLineNumber+ 1
-		            If dTextH.HasKey(currentLineNumber) Then gTextHeight= dTextH.Value(currentLineNumber)
-		            currentBaseline= currentBaseline- gTextHeight
-		            If currentBaseline< currentMarginBottom Then
-		              s= s+ "ET"+ CR // end text blocl
-		              ObjectPageCurrent.AddTextBlock s
-		              NextPage
-		              s= "BT"+ CR // begin text block
-		              s= s+ "/"+ fontRef+ " "+ DBReportPDFObject.fs(sr.Size)+ " Tf"+ CR
-		              currentBaseline= mPageHeight- y
-		            End If
-		          End If
-		        Wend
-		      End If
-		      
-		      If j< n Then
-		        currentLeft= x
-		        lineFeed= True
-		      Else
-		        currentLeft= currentLeft+ g.StringWidth(currentLine)
-		      End If
-		      
 		    Next
 		    
-		  Next
-		  
-		  s= s+ "ET"+ CR // end text block
-		  
-		  ObjectPageCurrent.AddTextBlock s
-		  
-		  mCurrentBaseLine= mPageHeight- currentBaseline
+		    s= s+ "ET"+ CR // end text block
+		    
+		    ObjectPageCurrent.AddTextBlock s
+		    
+		    mCurrentBaseLine= mPageHeight- currentBaseline
+		  #endif
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub DrawTextAreaAsImage(texta As TextArea, x As Double, y As Double, width As Double, height As Double = - 1)
-		  If texta.Text= "" Then Return
-		  
-		  #pragma BackgroundTasks false // to speed up
-		  
-		  Dim scale As Double= 2.0
-		  
-		  Dim st As StyledText= texta.StyledText
-		  Dim stylesCount As Integer= st.StyleRunCount- 1
-		  Dim sr As StyleRun
-		  Dim gtextHeight As Double
-		  Dim currentLeft As Double= x* scale
-		  Dim currentBaseline As Double= y* scale
-		  Dim currentMarginBottom As Double
-		  Dim currentColor As Color= &cFFFFFFFF
-		  Dim currentAlignment As Integer= -1
-		  Dim currentLine As String
-		  Dim currentLineNumber As Integer= 0
-		  Dim lineFeed As Boolean= True
-		  
-		  Static p As Picture
-		  If p= Nil Then p= New Picture(mPageWidth* scale, mPageHeight* scale, 32)
-		  Dim g As Graphics= p.Graphics
-		  g.ForeColor= &cFFFFFF00
-		  g.FillRect 0, 0, g.Width, g.Height
-		  
-		  // ini calc maxTextHeight TODO: calc left ini for center and right align
-		  Dim dTextH As Dictionary= New Dictionary // height of line
-		  Dim dTextW As Dictionary= New Dictionary // width of line
-		  Dim dTextL As Dictionary= New Dictionary // left of line
-		  For i As Integer= 0 To stylesCount
-		    sr= st.StyleRun(i)
+		Sub DrawTextAreaAsImage(texta As Object, x As Double, y As Double, width As Double, height As Double = - 1)
+		  #if TargetConsole
+		    #pragma Unused texta
+		    #pragma Unused x
+		    #pragma Unused y
+		    #pragma Unused width
+		    #pragma Unused height
+		  #else
+		    Dim txtArea As TextArea= TextArea(texta)
 		    
-		    g.TextFont= sr.Font // "Arial"
-		    g.TextSize= sr.Size* scale
-		    g.Bold= sr.Bold
-		    g.Italic= sr.Italic
-		    gTextHeight= g.TextHeight
+		    If txtArea.Text= "" Then Return
 		    
-		    Dim t As String= ReplaceLineEndings(sr.Text, EndOfLine.Macintosh)
-		    Dim n As Integer= CountFields(t, EndOfLine.Macintosh)
+		    #pragma BackgroundTasks false // to speed up
 		    
-		    For j As Integer= 1 To n
-		      currentLine= NthField(t, EndOfLine.Macintosh, j)
-		      If currentLine= "" And j<> n Then // just endofline
-		        currentLineNumber= currentLineNumber+ 1
-		        dTextH.Value(currentLineNumber)= gTextHeight
-		        dTextW.Value(currentLineNumber)= 0
-		        Continue
-		      End If
+		    Dim scale As Double= 2.0
+		    
+		    Dim st As StyledText= txtArea.StyledText
+		    Dim stylesCount As Integer= st.StyleRunCount- 1
+		    Dim sr As StyleRun
+		    Dim gtextHeight As Double
+		    Dim currentLeft As Double= x* scale
+		    Dim currentBaseline As Double= y* scale
+		    Dim currentMarginBottom As Double
+		    Dim currentColor As Color= &cFFFFFFFF
+		    Dim currentAlignment As Integer= -1
+		    Dim currentLine As String
+		    Dim currentLineNumber As Integer= 0
+		    Dim lineFeed As Boolean= True
+		    
+		    Static p As Picture
+		    If p= Nil Then p= New Picture(mPageWidth* scale, mPageHeight* scale, 32)
+		    Dim g As Graphics= p.Graphics
+		    g.ForeColor= &cFFFFFF00
+		    g.FillRect 0, 0, g.Width, g.Height
+		    
+		    // ini calc maxTextHeight TODO: calc left ini for center and right align
+		    Dim dTextH As Dictionary= New Dictionary // height of line
+		    Dim dTextW As Dictionary= New Dictionary // width of line
+		    Dim dTextL As Dictionary= New Dictionary // left of line
+		    For i As Integer= 0 To stylesCount
+		      sr= st.StyleRun(i)
 		      
-		      If lineFeed Then
-		        currentLineNumber= currentLineNumber+ 1
-		        lineFeed= False
-		      End If
+		      g.TextFont= sr.Font // "Arial"
+		      g.TextSize= sr.Size* scale
+		      g.Bold= sr.Bold
+		      g.Italic= sr.Italic
+		      gTextHeight= g.TextHeight
 		      
-		      If (currentLeft+ g.StringWidth(currentLine))<= (x+ width)* scale Then // one line
-		        If dTextH.HasKey(currentLineNumber) Then
-		          Dim tTextHeight As Double= dTextH.Value(currentLineNumber)
-		          If gTextHeight> tTextHeight Then dTextH.Value(currentLineNumber)= gTextHeight
-		        Else
+		      Dim t As String= ReplaceLineEndings(sr.Text, EndOfLine.Macintosh)
+		      Dim n As Integer= CountFields(t, EndOfLine.Macintosh)
+		      
+		      For j As Integer= 1 To n
+		        currentLine= NthField(t, EndOfLine.Macintosh, j)
+		        If currentLine= "" And j<> n Then // just endofline
+		          currentLineNumber= currentLineNumber+ 1
 		          dTextH.Value(currentLineNumber)= gTextHeight
+		          dTextW.Value(currentLineNumber)= 0
+		          Continue
 		        End If
-		        If dTextW.HasKey(currentLineNumber) Then
-		          Dim tTextW As Double= dTextW.Value(currentLineNumber)
-		          dTextW.Value(currentLineNumber)= tTextW+ g.StringWidth(currentLine)
-		        Else
-		          dTextW.Value(currentLineNumber)= g.StringWidth(currentLine)
-		        End If
-		        dTextL.Value(i)= currentLeft- (x* scale)
-		      Else
-		        Dim words() As String= currentLine.Split(" ")
-		        currentLine= ""
 		        
-		        While Ubound(words)> -1
-		          If (currentLeft+ g.StringWidth(currentLine+ words(0)))<= (x+ width)* scale Then
-		            If currentLine= "" Then currentLine= words(0) Else currentLine= currentLine+ " "+ words(0)
-		            words.Remove 0
-		            If Ubound(words)= -1 Then
+		        If lineFeed Then
+		          currentLineNumber= currentLineNumber+ 1
+		          lineFeed= False
+		        End If
+		        
+		        If (currentLeft+ g.StringWidth(currentLine))<= (x+ width)* scale Then // one line
+		          If dTextH.HasKey(currentLineNumber) Then
+		            Dim tTextHeight As Double= dTextH.Value(currentLineNumber)
+		            If gTextHeight> tTextHeight Then dTextH.Value(currentLineNumber)= gTextHeight
+		          Else
+		            dTextH.Value(currentLineNumber)= gTextHeight
+		          End If
+		          If dTextW.HasKey(currentLineNumber) Then
+		            Dim tTextW As Double= dTextW.Value(currentLineNumber)
+		            dTextW.Value(currentLineNumber)= tTextW+ g.StringWidth(currentLine)
+		          Else
+		            dTextW.Value(currentLineNumber)= g.StringWidth(currentLine)
+		          End If
+		          dTextL.Value(i)= currentLeft- (x* scale)
+		        Else
+		          Dim words() As String= currentLine.Split(" ")
+		          currentLine= ""
+		          
+		          While Ubound(words)> -1
+		            If (currentLeft+ g.StringWidth(currentLine+ words(0)))<= (x+ width)* scale Then
+		              If currentLine= "" Then currentLine= words(0) Else currentLine= currentLine+ " "+ words(0)
+		              words.Remove 0
+		              If Ubound(words)= -1 Then
+		                If dTextW.HasKey(currentLineNumber) Then
+		                  Dim tTextW As Double= dTextW.Value(currentLineNumber)
+		                  dTextW.Value(currentLineNumber)= tTextW+ g.StringWidth(currentLine)
+		                Else
+		                  dTextW.Value(currentLineNumber)= g.StringWidth(currentLine)
+		                End If
+		                dTextL.Value(i)= currentLeft- (x* scale)
+		              End If
+		            Else
+		              // TODO: chk for long word
+		              If dTextH.HasKey(currentLineNumber) Then
+		                Dim tTextHeight As Double= dTextH.Value(currentLineNumber)
+		                If gTextHeight> tTextHeight Then dTextH.Value(currentLineNumber)= gTextHeight
+		              Else
+		                dTextH.Value(currentLineNumber)= gTextHeight
+		              End If
 		              If dTextW.HasKey(currentLineNumber) Then
 		                Dim tTextW As Double= dTextW.Value(currentLineNumber)
 		                dTextW.Value(currentLineNumber)= tTextW+ g.StringWidth(currentLine)
@@ -710,198 +745,183 @@ Protected Class DBReportPDF
 		                dTextW.Value(currentLineNumber)= g.StringWidth(currentLine)
 		              End If
 		              dTextL.Value(i)= currentLeft- (x* scale)
+		              
+		              currentLine= ""
+		              currentLeft= x* scale
+		              currentLineNumber= currentLineNumber+ 1
 		            End If
-		          Else
-		            // TODO: chk for long word
-		            If dTextH.HasKey(currentLineNumber) Then
-		              Dim tTextHeight As Double= dTextH.Value(currentLineNumber)
-		              If gTextHeight> tTextHeight Then dTextH.Value(currentLineNumber)= gTextHeight
-		            Else
-		              dTextH.Value(currentLineNumber)= gTextHeight
-		            End If
-		            If dTextW.HasKey(currentLineNumber) Then
-		              Dim tTextW As Double= dTextW.Value(currentLineNumber)
-		              dTextW.Value(currentLineNumber)= tTextW+ g.StringWidth(currentLine)
-		            Else
-		              dTextW.Value(currentLineNumber)= g.StringWidth(currentLine)
-		            End If
-		            dTextL.Value(i)= currentLeft- (x* scale)
-		            
-		            currentLine= ""
-		            currentLeft= x* scale
-		            currentLineNumber= currentLineNumber+ 1
-		          End If
-		        Wend
-		      End If
-		      
-		      If j< n Then
-		        currentLeft= x* scale
-		        lineFeed= True
-		      Else
-		        currentLeft= currentLeft+ g.StringWidth(currentLine)
-		      End If
+		          Wend
+		        End If
+		        
+		        If j< n Then
+		          currentLeft= x* scale
+		          lineFeed= True
+		        Else
+		          currentLeft= currentLeft+ g.StringWidth(currentLine)
+		        End If
+		      Next
 		    Next
-		  Next
-		  currentLeft= x* scale
-		  currentLineNumber= 0
-		  // end calc maxTextHeight
-		  
-		  lineFeed= True
-		  
-		  If height= -1 Then currentMarginBottom= (mPageHeight- 50)* scale Else _
-		  currentMarginBottom= (mPageHeight- y- height)* scale
-		  
-		  For i As Integer= 0 To stylesCount
-		    sr= st.StyleRun(i)
+		    currentLeft= x* scale
+		    currentLineNumber= 0
+		    // end calc maxTextHeight
 		    
-		    If currentColor<> sr.TextColor Then
-		      currentColor= sr.TextColor
-		    End If
+		    lineFeed= True
 		    
-		    g.ForeColor= sr.TextColor
-		    g.TextFont= sr.Font // "Arial"
-		    g.TextSize= sr.Size* scale
-		    g.Bold= sr.Bold
-		    g.Italic= sr.Italic
-		    gtextHeight= g.TextHeight
+		    If height= -1 Then currentMarginBottom= (mPageHeight- 50)* scale Else _
+		    currentMarginBottom= (mPageHeight- y- height)* scale
 		    
-		    Dim t As String= ReplaceLineEndings(sr.Text, EndOfLine.Macintosh)
-		    Dim n As Integer= CountFields(t, EndOfLine.Macintosh)
-		    
-		    For j As Integer= 1 To n
-		      currentLine= NthField(t, EndOfLine.Macintosh, j)
-		      If currentLine= "" And j<> n Then // just endofline
-		        currentLineNumber= currentLineNumber+ 1
-		        If dTextH.HasKey(currentLineNumber) Then gTextHeight= dTextH.Value(currentLineNumber)
-		        currentBaseline= currentBaseline+ gTextHeight
-		        If currentBaseline> currentMarginBottom Then
-		          DrawPicture p, 0, 0, mPageWidth, mPageHeight
-		          NextPage
-		          Dim oldColor As Color= g.ForeColor
-		          g.ForeColor= &cFFFFFF00
-		          g.FillRect 0, 0, g.Width, g.Height
-		          g.ForeColor= oldColor
-		          currentBaseline= y* scale
-		        End If
-		        currentLeft= x* scale
-		        Continue
-		      End
+		    For i As Integer= 0 To stylesCount
+		      sr= st.StyleRun(i)
 		      
-		      If lineFeed Then
-		        currentLineNumber= currentLineNumber+ 1
-		        If dTextH.HasKey(currentLineNumber) Then gTextHeight= dTextH.Value(currentLineNumber)
-		        currentBaseline= currentBaseline+ gTextHeight
-		        If currentBaseline> currentMarginBottom Then
-		          DrawPicture p, 0, 0, mPageWidth, mPageHeight
-		          NextPage
-		          Dim oldColor As Color= g.ForeColor
-		          g.ForeColor= &cFFFFFF00
-		          g.FillRect 0, 0, g.Width, g.Height
-		          g.ForeColor= oldColor
-		          currentBaseline= y* scale
-		        End If
-		        lineFeed= False
+		      If currentColor<> sr.TextColor Then
+		        currentColor= sr.TextColor
 		      End If
 		      
-		      // check the alignment using the Paragraph list
-		      Dim alignment As Integer= 0
-		      Dim pc As Integer= st.ParagraphCount- 1
-		      For pi As Integer= 0 To pc
-		        Dim pa As Paragraph= st.Paragraph(pi)
-		        Dim rn As DatabaseRecord= InStrRangeEOL(sr.Text, st.StyleRunRange(i), j)
-		        If rn.IntegerColumn("StartPos")>= pa.StartPos And rn.IntegerColumn("EndPos")<= pa.EndPos Then
-		          #if Not TargetLinux then
-		            alignment= pa.Alignment
-		            Exit For pi
-		          #endif
+		      g.ForeColor= sr.TextColor
+		      g.TextFont= sr.Font // "Arial"
+		      g.TextSize= sr.Size* scale
+		      g.Bold= sr.Bold
+		      g.Italic= sr.Italic
+		      gtextHeight= g.TextHeight
+		      
+		      Dim t As String= ReplaceLineEndings(sr.Text, EndOfLine.Macintosh)
+		      Dim n As Integer= CountFields(t, EndOfLine.Macintosh)
+		      
+		      For j As Integer= 1 To n
+		        currentLine= NthField(t, EndOfLine.Macintosh, j)
+		        If currentLine= "" And j<> n Then // just endofline
+		          currentLineNumber= currentLineNumber+ 1
+		          If dTextH.HasKey(currentLineNumber) Then gTextHeight= dTextH.Value(currentLineNumber)
+		          currentBaseline= currentBaseline+ gTextHeight
+		          If currentBaseline> currentMarginBottom Then
+		            DrawPicture p, 0, 0, mPageWidth, mPageHeight
+		            NextPage
+		            Dim oldColor As Color= g.ForeColor
+		            g.ForeColor= &cFFFFFF00
+		            g.FillRect 0, 0, g.Width, g.Height
+		            g.ForeColor= oldColor
+		            currentBaseline= y* scale
+		          End If
+		          currentLeft= x* scale
+		          Continue
 		        End
+		        
+		        If lineFeed Then
+		          currentLineNumber= currentLineNumber+ 1
+		          If dTextH.HasKey(currentLineNumber) Then gTextHeight= dTextH.Value(currentLineNumber)
+		          currentBaseline= currentBaseline+ gTextHeight
+		          If currentBaseline> currentMarginBottom Then
+		            DrawPicture p, 0, 0, mPageWidth, mPageHeight
+		            NextPage
+		            Dim oldColor As Color= g.ForeColor
+		            g.ForeColor= &cFFFFFF00
+		            g.FillRect 0, 0, g.Width, g.Height
+		            g.ForeColor= oldColor
+		            currentBaseline= y* scale
+		          End If
+		          lineFeed= False
+		        End If
+		        
+		        // check the alignment using the Paragraph list
+		        Dim alignment As Integer= 0
+		        Dim pc As Integer= st.ParagraphCount- 1
+		        For pi As Integer= 0 To pc
+		          Dim pa As Paragraph= st.Paragraph(pi)
+		          Dim rn As DatabaseRecord= InStrRangeEOL(sr.Text, st.StyleRunRange(i), j)
+		          If rn.IntegerColumn("StartPos")>= pa.StartPos And rn.IntegerColumn("EndPos")<= pa.EndPos Then
+		            #if Not TargetLinux
+		              alignment= pa.Alignment
+		              Exit For pi
+		            #endif
+		          End
+		        Next
+		        
+		        // apply alignment
+		        If currentAlignment<> alignment Then
+		          currentAlignment= alignment
+		          currentLeft= x* scale
+		        End if
+		        
+		        If (currentLeft+ g.StringWidth(currentLine))<= (x+ width)* scale Then // one line
+		          
+		          // check alignment
+		          Select case alignment
+		          case TextArea.AlignCenter
+		            Dim tTextW As Double= dTextW.Value(currentLineNumber)
+		            Dim tTextL As Double= dTextL.Value(i)
+		            currentLeft= (x* scale)+ (((width* scale)- tTextW)/ 2)+ tTextL // TODO: wrong g.StringWidth(currentLine)
+		          case TextArea.AlignRight
+		            Dim tTextW As Double= dTextW.Value(currentLineNumber)
+		            Dim tTextL As Double= dTextL.Value(i)
+		            currentLeft= ((x+ width)* scale)- tTextW+ tTextL // TODO: wrong g.StringWidth(currentLine)
+		          else // Left
+		          end Select
+		          // Draw currentLeft, currentBaseline, currentLine
+		          g.DrawString currentLine, currentLeft, currentBaseline
+		        Else // multiline
+		          Dim words() As String= currentLine.Split(" ")
+		          currentLine= ""
+		          
+		          While Ubound(words)> -1
+		            If (currentLeft+ g.StringWidth(currentLine+ words(0)))<= (x+ width)* scale Then
+		              If currentLine= "" Then currentLine= words(0) Else currentLine= currentLine+ " "+ words(0)
+		              words.Remove 0
+		              If Ubound(words)= -1 Then
+		                // Draw currentLeft, currentBaseline, currentLine
+		                g.DrawString currentLine, currentLeft, currentBaseline
+		              End If
+		            Else
+		              // TODO: chk for long word
+		              If alignment< 2 Then
+		                Dim jWords() As String= currentLine.Split(" ") // justified words
+		                Dim jWordsN As Integer= UBound(jWords)  // justified words number
+		                Dim jWordsWidth, jWordsSpace As Double
+		                For ji As Integer= 0 To jWordsN
+		                  jWordsWidth= jWordsWidth+ g.StringWidth(jWords(ji))
+		                Next
+		                jWordsSpace= ((width* scale)- jWordsWidth)/ jWordsN
+		                For ji As Integer= 0 To jWordsN
+		                  // Draw currentLeft, currentBaseline, jWords(ji)
+		                  g.DrawString jWords(ji), currentLeft, currentBaseline
+		                  If ji< jWordsN Then currentLeft= currentLeft+ g.StringWidth(jWords(ji))+ jWordsSpace Else currentLeft= currentLeft+ g.StringWidth(jWords(ji))
+		                Next
+		              Else
+		                // Draw currentLeft, currentBaseline, jWords(ji)
+		                g.DrawString currentLine, currentLeft, currentBaseline
+		              End
+		              currentLine= ""
+		              currentLeft= x* scale
+		              currentLineNumber= currentLineNumber+ 1
+		              If dTextH.HasKey(currentLineNumber) Then gTextHeight= dTextH.Value(currentLineNumber)
+		              currentBaseline= currentBaseline+ gTextHeight
+		              If currentBaseline> currentMarginBottom Then
+		                DrawPicture p, 0, 0, mPageWidth, mPageHeight
+		                NextPage
+		                Dim oldColor As Color= g.ForeColor
+		                g.ForeColor= &cFFFFFF00
+		                g.FillRect 0, 0, g.Width, g.Height
+		                g.ForeColor= oldColor
+		                currentBaseline= y* scale
+		              End If
+		            End If
+		          Wend
+		        End If
+		        
+		        If j< n Then
+		          currentLeft= x* scale
+		          lineFeed= True
+		        Else
+		          currentLeft= currentLeft+ g.StringWidth(currentLine)
+		        End If
+		        
 		      Next
 		      
-		      // apply alignment
-		      If currentAlignment<> alignment Then
-		        currentAlignment= alignment
-		        currentLeft= x* scale
-		      End if
-		      
-		      If (currentLeft+ g.StringWidth(currentLine))<= (x+ width)* scale Then // one line
-		        
-		        // check alignment
-		        Select case alignment
-		        case TextArea.AlignCenter
-		          Dim tTextW As Double= dTextW.Value(currentLineNumber)
-		          Dim tTextL As Double= dTextL.Value(i)
-		          currentLeft= (x* scale)+ (((width* scale)- tTextW)/ 2)+ tTextL // TODO: wrong g.StringWidth(currentLine)
-		        case TextArea.AlignRight
-		          Dim tTextW As Double= dTextW.Value(currentLineNumber)
-		          Dim tTextL As Double= dTextL.Value(i)
-		          currentLeft= ((x+ width)* scale)- tTextW+ tTextL // TODO: wrong g.StringWidth(currentLine)
-		        else // Left
-		        end Select
-		        // Draw currentLeft, currentBaseline, currentLine
-		        g.DrawString currentLine, currentLeft, currentBaseline
-		      Else // multiline
-		        Dim words() As String= currentLine.Split(" ")
-		        currentLine= ""
-		        
-		        While Ubound(words)> -1
-		          If (currentLeft+ g.StringWidth(currentLine+ words(0)))<= (x+ width)* scale Then
-		            If currentLine= "" Then currentLine= words(0) Else currentLine= currentLine+ " "+ words(0)
-		            words.Remove 0
-		            If Ubound(words)= -1 Then
-		              // Draw currentLeft, currentBaseline, currentLine
-		              g.DrawString currentLine, currentLeft, currentBaseline
-		            End If
-		          Else
-		            // TODO: chk for long word
-		            If alignment< 2 Then
-		              Dim jWords() As String= currentLine.Split(" ") // justified words
-		              Dim jWordsN As Integer= UBound(jWords)  // justified words number
-		              Dim jWordsWidth, jWordsSpace As Double
-		              For ji As Integer= 0 To jWordsN
-		                jWordsWidth= jWordsWidth+ g.StringWidth(jWords(ji))
-		              Next
-		              jWordsSpace= ((width* scale)- jWordsWidth)/ jWordsN
-		              For ji As Integer= 0 To jWordsN
-		                // Draw currentLeft, currentBaseline, jWords(ji)
-		                g.DrawString jWords(ji), currentLeft, currentBaseline
-		                If ji< jWordsN Then currentLeft= currentLeft+ g.StringWidth(jWords(ji))+ jWordsSpace Else currentLeft= currentLeft+ g.StringWidth(jWords(ji))
-		              Next
-		            Else
-		              // Draw currentLeft, currentBaseline, jWords(ji)
-		              g.DrawString currentLine, currentLeft, currentBaseline
-		            End
-		            currentLine= ""
-		            currentLeft= x* scale
-		            currentLineNumber= currentLineNumber+ 1
-		            If dTextH.HasKey(currentLineNumber) Then gTextHeight= dTextH.Value(currentLineNumber)
-		            currentBaseline= currentBaseline+ gTextHeight
-		            If currentBaseline> currentMarginBottom Then
-		              DrawPicture p, 0, 0, mPageWidth, mPageHeight
-		              NextPage
-		              Dim oldColor As Color= g.ForeColor
-		              g.ForeColor= &cFFFFFF00
-		              g.FillRect 0, 0, g.Width, g.Height
-		              g.ForeColor= oldColor
-		              currentBaseline= y* scale
-		            End If
-		          End If
-		        Wend
-		      End If
-		      
-		      If j< n Then
-		        currentLeft= x* scale
-		        lineFeed= True
-		      Else
-		        currentLeft= currentLeft+ g.StringWidth(currentLine)
-		      End If
-		      
 		    Next
 		    
-		  Next
-		  
-		  DrawPicture p, 0, 0, mPageWidth, mPageHeight
-		  
-		  mCurrentBaseLine= currentBaseline/ scale
+		    DrawPicture p, 0, 0, mPageWidth, mPageHeight
+		    
+		    mCurrentBaseLine= currentBaseline/ scale
+		  #endif
 		End Sub
 	#tag EndMethod
 
@@ -951,7 +971,7 @@ Protected Class DBReportPDF
 
 	#tag Method, Flags = &h21
 		Private Sub Init()
-		  #If TargetWin32
+		  #If TargetWin32 And TargetHasGUI
 		    App.UseGDIPlus = True
 		  #endif
 		  
@@ -1070,7 +1090,7 @@ Protected Class DBReportPDF
 
 	#tag Method, Flags = &h0
 		Function StringHeight(Text As String, WrapWidth As Double) As Double
-		  Dim p As New Picture(10, 10)
+		  Dim p As New Picture(10, 10, 1)
 		  Dim g As Graphics= p.Graphics
 		  g.TextFont= TextFont
 		  g.TextSize= TextSize
@@ -1084,7 +1104,7 @@ Protected Class DBReportPDF
 
 	#tag Method, Flags = &h0
 		Function StringWidth(text As String) As Double
-		  Dim p As New Picture(10, 10)
+		  Dim p As New Picture(10, 10, 1)
 		  Dim g As Graphics= p.Graphics
 		  g.TextFont= TextFont
 		  g.TextSize= TextSize
@@ -1197,13 +1217,17 @@ Protected Class DBReportPDF
 
 
 	#tag Note, Name = Readme
-		DBReportPDF v0.2.1614
+		DBReportPDF v0.2.2817
 		
 		Based on pdfFile by Toby W. Rush and rsfpdf from https://github.com/roblthegreat/rsfpdf
 		
 		by Bernardo Monsalve Copyright © 2014-2015 Bernardo Monsalve. All rights reserved.
 		
 		Version changelog:
+		
+		0.2.2817
+		
+		- Fixed console issues.
 		
 		0.2.1614
 		
@@ -1450,7 +1474,7 @@ Protected Class DBReportPDF
 	#tag Constant, Name = kPageWidth, Type = Double, Dynamic = False, Default = \"612", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.1614", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.2817", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = Z_BUF_ERROR, Type = Double, Dynamic = False, Default = \"-5", Scope = Private
