@@ -59,14 +59,7 @@ Protected Module DBReportShared
 
 	#tag Note, Name = Readme
 		
-		DBReportPDF v0.1.1201
-		
-		Fork of https://github.com/roblthegreat/rsfpdf
-		
-		TODO:
-		
-		DPI
-		Embedded fonts
+		see Readme DBReportPDF note
 	#tag EndNote
 
 	#tag Note, Name = zlibDocumentation
@@ -117,9 +110,9 @@ Protected Module DBReportShared
 
 
 	#tag Constant, Name = kzlibPath, Type = String, Dynamic = False, Default = \"", Scope = Protected
-		#Tag Instance, Platform = Mac OS, Language = Default, Definition  = \"/usr/lib/libz.dylib"
-		#Tag Instance, Platform = Windows, Language = Default, Definition  = \"ZLIB1.DLL"
-		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"/usr/lib/libz.so.1"
+		#Tag Instance, Platform = -, Language = Default, Definition  = \"/usr/lib/libz.dylib"
+		#Tag Instance, Platform = Mac OS, Language = Default, Definition  = \"ZLIB1.DLL"
+		#Tag Instance, Platform = Mac Classic, Language = Default, Definition  = \"/usr/lib/libz.so.1"
 	#tag EndConstant
 
 	#tag Constant, Name = Z_BUF_ERROR, Type = Double, Dynamic = False, Default = \"-5", Scope = Private

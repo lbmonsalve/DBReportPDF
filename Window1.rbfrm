@@ -98,7 +98,7 @@ Begin Window Window1
       Underline       =   ""
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   339
+      Width           =   166
    End
    Begin Label Label1
       AutoDeactivate  =   True
@@ -134,140 +134,566 @@ Begin Window Window1
       Visible         =   True
       Width           =   42
    End
-   Begin TextArea TextArea1
-      AcceptTabs      =   ""
-      Alignment       =   0
+   Begin GroupBox GroupBox1
       AutoDeactivate  =   True
-      AutomaticallyCheckSpelling=   True
-      BackColor       =   &hFFFFFF
       Bold            =   ""
-      Border          =   True
-      DataField       =   ""
-      DataSource      =   ""
+      Caption         =   "StyledText"
       Enabled         =   True
-      Format          =   ""
-      Height          =   132
+      Height          =   313
       HelpTag         =   ""
-      HideSelection   =   True
-      Index           =   -2147483648
-      Italic          =   ""
-      Left            =   20
-      LimitText       =   0
-      LineHeight      =   0
-      LineSpacing     =   1
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   True
-      LockTop         =   True
-      Mask            =   ""
-      Multiline       =   True
-      ReadOnly        =   ""
-      Scope           =   0
-      ScrollbarHorizontal=   ""
-      ScrollbarVertical=   True
-      Styled          =   True
-      TabIndex        =   3
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Text            =   ""
-      TextColor       =   &h000000
-      TextFont        =   "System"
-      TextSize        =   0
-      TextUnit        =   0
-      Top             =   63
-      Underline       =   ""
-      UseFocusRing    =   True
-      Visible         =   True
-      Width           =   560
-   End
-   Begin BevelButton BevelButton2
-      AcceptFocus     =   False
-      AutoDeactivate  =   True
-      BackColor       =   "&c00000000"
-      Bevel           =   0
-      Bold            =   False
-      ButtonType      =   0
-      Caption         =   "Styled INI"
-      CaptionAlign    =   3
-      CaptionDelta    =   0
-      CaptionPlacement=   1
-      Enabled         =   True
-      HasBackColor    =   False
-      HasMenu         =   0
-      Height          =   35
-      HelpTag         =   ""
-      Icon            =   ""
-      IconAlign       =   0
-      IconDX          =   0
-      IconDY          =   0
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   False
+      Italic          =   ""
       Left            =   26
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
-      LockTop         =   False
-      MenuValue       =   0
+      LockRight       =   True
+      LockTop         =   True
       Scope           =   0
-      TabIndex        =   4
+      TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
-      TextColor       =   "&c00000000"
       TextFont        =   "System"
-      TextSize        =   ""
+      TextSize        =   0
       TextUnit        =   0
-      Top             =   351
-      Underline       =   False
-      Value           =   False
+      Top             =   59
+      Underline       =   ""
       Visible         =   True
-      Width           =   80
+      Width           =   554
+      Begin TextArea TextArea1
+         AcceptTabs      =   ""
+         Alignment       =   0
+         AutoDeactivate  =   True
+         AutomaticallyCheckSpelling=   True
+         BackColor       =   &hFFFFFF
+         Bold            =   ""
+         Border          =   True
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Format          =   ""
+         Height          =   170
+         HelpTag         =   ""
+         HideSelection   =   True
+         Index           =   -2147483648
+         InitialParent   =   "GroupBox1"
+         Italic          =   ""
+         Left            =   43
+         LimitText       =   0
+         LockBottom      =   False
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   True
+         LockTop         =   True
+         Mask            =   ""
+         Multiline       =   True
+         ReadOnly        =   ""
+         Scope           =   0
+         ScrollbarHorizontal=   ""
+         ScrollbarVertical=   True
+         Styled          =   True
+         TabIndex        =   0
+         TabPanelIndex   =   0
+         TabStop         =   True
+         Text            =   ""
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   130
+         Underline       =   ""
+         UseFocusRing    =   True
+         Visible         =   True
+         Width           =   520
+      End
+      Begin BevelButton BevelButton2
+         AcceptFocus     =   False
+         AutoDeactivate  =   True
+         BackColor       =   "&c00000000"
+         Bevel           =   0
+         Bold            =   False
+         ButtonType      =   0
+         Caption         =   "Styled INI"
+         CaptionAlign    =   3
+         CaptionDelta    =   0
+         CaptionPlacement=   1
+         Enabled         =   True
+         HasBackColor    =   False
+         HasMenu         =   0
+         Height          =   35
+         HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   0
+         IconDY          =   0
+         Index           =   -2147483648
+         InitialParent   =   "GroupBox1"
+         Italic          =   False
+         Left            =   40
+         LockBottom      =   True
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   False
+         MenuValue       =   0
+         Scope           =   0
+         TabIndex        =   1
+         TabPanelIndex   =   0
+         TabStop         =   True
+         TextColor       =   "&c00000000"
+         TextFont        =   "System"
+         TextSize        =   ""
+         TextUnit        =   0
+         Top             =   322
+         Underline       =   False
+         Value           =   False
+         Visible         =   True
+         Width           =   80
+      End
+      Begin BevelButton BevelButton3
+         AcceptFocus     =   False
+         AutoDeactivate  =   True
+         BackColor       =   "&c00000000"
+         Bevel           =   0
+         Bold            =   False
+         ButtonType      =   0
+         Caption         =   "Styled PDF"
+         CaptionAlign    =   3
+         CaptionDelta    =   0
+         CaptionPlacement=   1
+         Enabled         =   True
+         HasBackColor    =   False
+         HasMenu         =   0
+         Height          =   35
+         HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   0
+         IconDY          =   0
+         Index           =   -2147483648
+         InitialParent   =   "GroupBox1"
+         Italic          =   False
+         Left            =   132
+         LockBottom      =   True
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   False
+         MenuValue       =   0
+         Scope           =   0
+         TabIndex        =   2
+         TabPanelIndex   =   0
+         TabStop         =   True
+         TextColor       =   "&c00000000"
+         TextFont        =   "System"
+         TextSize        =   ""
+         TextUnit        =   0
+         Top             =   322
+         Underline       =   False
+         Value           =   False
+         Visible         =   True
+         Width           =   80
+      End
+      Begin BevelButton tbNew
+         AcceptFocus     =   False
+         AutoDeactivate  =   True
+         BackColor       =   "&c00000000"
+         Bevel           =   0
+         Bold            =   False
+         ButtonType      =   0
+         Caption         =   "New"
+         CaptionAlign    =   3
+         CaptionDelta    =   0
+         CaptionPlacement=   1
+         Enabled         =   True
+         HasBackColor    =   False
+         HasMenu         =   0
+         Height          =   30
+         HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   0
+         IconDY          =   0
+         Index           =   -2147483648
+         InitialParent   =   "GroupBox1"
+         Italic          =   False
+         Left            =   43
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         MenuValue       =   0
+         Scope           =   0
+         TabIndex        =   3
+         TabPanelIndex   =   0
+         TabStop         =   True
+         TextColor       =   "&c00000000"
+         TextFont        =   "System"
+         TextSize        =   ""
+         TextUnit        =   0
+         Top             =   86
+         Underline       =   False
+         Value           =   False
+         Visible         =   True
+         Width           =   60
+      End
+      Begin BevelButton tbFont
+         AcceptFocus     =   False
+         AutoDeactivate  =   True
+         BackColor       =   "&c00000000"
+         Bevel           =   0
+         Bold            =   False
+         ButtonType      =   0
+         Caption         =   "System"
+         CaptionAlign    =   0
+         CaptionDelta    =   10
+         CaptionPlacement=   1
+         Enabled         =   True
+         HasBackColor    =   False
+         HasMenu         =   1
+         Height          =   30
+         HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   0
+         IconDY          =   0
+         Index           =   -2147483648
+         InitialParent   =   "GroupBox1"
+         Italic          =   False
+         Left            =   110
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         MenuValue       =   0
+         Scope           =   0
+         TabIndex        =   4
+         TabPanelIndex   =   0
+         TabStop         =   True
+         TextColor       =   "&c00000000"
+         TextFont        =   "System"
+         TextSize        =   ""
+         TextUnit        =   0
+         Top             =   86
+         Underline       =   False
+         Value           =   False
+         Visible         =   True
+         Width           =   126
+      End
+      Begin TextField tbFontSize
+         AcceptTabs      =   ""
+         Alignment       =   0
+         AutoDeactivate  =   True
+         AutomaticallyCheckSpelling=   False
+         BackColor       =   &hFFFFFF
+         Bold            =   ""
+         Border          =   True
+         CueText         =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Format          =   "###.##"
+         Height          =   22
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "GroupBox1"
+         Italic          =   ""
+         Left            =   248
+         LimitText       =   0
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Mask            =   ""
+         Password        =   ""
+         ReadOnly        =   ""
+         Scope           =   0
+         TabIndex        =   5
+         TabPanelIndex   =   0
+         TabStop         =   True
+         Text            =   ""
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   90
+         Underline       =   ""
+         UseFocusRing    =   True
+         Visible         =   True
+         Width           =   44
+      End
+      Begin PopupMenu tbFontSizePopup
+         AutoDeactivate  =   True
+         Bold            =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "GroupBox1"
+         InitialValue    =   ""
+         Italic          =   ""
+         Left            =   294
+         ListIndex       =   0
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   6
+         TabPanelIndex   =   0
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   89
+         Underline       =   ""
+         Visible         =   True
+         Width           =   19
+      End
+      Begin BevelButton tbAlign
+         AcceptFocus     =   False
+         AutoDeactivate  =   True
+         BackColor       =   "&c00000000"
+         Bevel           =   0
+         Bold            =   False
+         ButtonType      =   0
+         Caption         =   "Left"
+         CaptionAlign    =   0
+         CaptionDelta    =   10
+         CaptionPlacement=   1
+         Enabled         =   True
+         HasBackColor    =   False
+         HasMenu         =   1
+         Height          =   30
+         HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   0
+         IconDY          =   0
+         Index           =   -2147483648
+         InitialParent   =   "GroupBox1"
+         Italic          =   False
+         Left            =   324
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         MenuValue       =   0
+         Scope           =   0
+         TabIndex        =   7
+         TabPanelIndex   =   0
+         TabStop         =   True
+         TextColor       =   "&c00000000"
+         TextFont        =   "System"
+         TextSize        =   ""
+         TextUnit        =   0
+         Top             =   86
+         Underline       =   False
+         Value           =   False
+         Visible         =   True
+         Width           =   80
+      End
+      Begin BevelButton tbFontBold
+         AcceptFocus     =   False
+         AutoDeactivate  =   True
+         BackColor       =   "&c00000000"
+         Bevel           =   0
+         Bold            =   True
+         ButtonType      =   1
+         Caption         =   "N"
+         CaptionAlign    =   3
+         CaptionDelta    =   0
+         CaptionPlacement=   1
+         Enabled         =   True
+         HasBackColor    =   False
+         HasMenu         =   0
+         Height          =   30
+         HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   0
+         IconDY          =   0
+         Index           =   -2147483648
+         InitialParent   =   "GroupBox1"
+         Italic          =   False
+         Left            =   463
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         MenuValue       =   0
+         Scope           =   0
+         TabIndex        =   8
+         TabPanelIndex   =   0
+         TabStop         =   True
+         TextColor       =   "&c00000000"
+         TextFont        =   "System"
+         TextSize        =   ""
+         TextUnit        =   0
+         Top             =   86
+         Underline       =   False
+         Value           =   False
+         Visible         =   True
+         Width           =   30
+      End
+      Begin BevelButton tbFontItalic
+         AcceptFocus     =   False
+         AutoDeactivate  =   True
+         BackColor       =   &h00000000
+         Bevel           =   0
+         Bold            =   False
+         ButtonType      =   1
+         Caption         =   "I"
+         CaptionAlign    =   3
+         CaptionDelta    =   0
+         CaptionPlacement=   1
+         Enabled         =   True
+         HasBackColor    =   False
+         HasMenu         =   0
+         Height          =   30
+         HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   0
+         IconDY          =   0
+         Index           =   -2147483648
+         InitialParent   =   "GroupBox1"
+         Italic          =   True
+         Left            =   496
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         MenuValue       =   0
+         Scope           =   0
+         TabIndex        =   9
+         TabPanelIndex   =   0
+         TabStop         =   True
+         TextColor       =   &h00000000
+         TextFont        =   "System"
+         TextSize        =   ""
+         TextUnit        =   0
+         Top             =   86
+         Underline       =   False
+         Value           =   False
+         Visible         =   True
+         Width           =   30
+      End
+      Begin BevelButton tbFontUnderline
+         AcceptFocus     =   False
+         AutoDeactivate  =   True
+         BackColor       =   &h00000000
+         Bevel           =   0
+         Bold            =   False
+         ButtonType      =   1
+         Caption         =   "U"
+         CaptionAlign    =   3
+         CaptionDelta    =   0
+         CaptionPlacement=   1
+         Enabled         =   True
+         HasBackColor    =   False
+         HasMenu         =   0
+         Height          =   30
+         HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   0
+         IconDY          =   0
+         Index           =   -2147483648
+         InitialParent   =   "GroupBox1"
+         Italic          =   False
+         Left            =   529
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         MenuValue       =   0
+         Scope           =   0
+         TabIndex        =   10
+         TabPanelIndex   =   0
+         TabStop         =   True
+         TextColor       =   &h00000000
+         TextFont        =   "System"
+         TextSize        =   ""
+         TextUnit        =   0
+         Top             =   86
+         Underline       =   True
+         Value           =   False
+         Visible         =   True
+         Width           =   30
+      End
    End
-   Begin BevelButton BevelButton3
-      AcceptFocus     =   False
+   Begin ColorPanel tbFontColor
+      AcceptFocus     =   ""
+      AcceptTabs      =   ""
       AutoDeactivate  =   True
-      BackColor       =   "&c00000000"
-      Bevel           =   0
-      Bold            =   False
-      ButtonType      =   0
-      Caption         =   "Styled PDF"
-      CaptionAlign    =   3
-      CaptionDelta    =   0
-      CaptionPlacement=   1
+      Backdrop        =   ""
+      current         =   &h000000
+      DoubleBuffer    =   False
       Enabled         =   True
-      HasBackColor    =   False
-      HasMenu         =   0
-      Height          =   35
+      EraseBackground =   True
+      Height          =   32
       HelpTag         =   ""
-      Icon            =   ""
-      IconAlign       =   0
-      IconDX          =   0
-      IconDY          =   0
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   False
-      Left            =   118
-      LockBottom      =   True
+      Left            =   416
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   ""
+      LockRight       =   ""
+      LockTop         =   ""
+      Scope           =   0
+      TabIndex        =   0
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Top             =   86
+      UseFocusRing    =   True
+      Visible         =   True
+      Width           =   32
+   End
+   Begin Label Label2
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   44
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   324
+      LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   ""
-      LockTop         =   False
-      MenuValue       =   0
+      LockTop         =   True
+      Multiline       =   True
       Scope           =   0
-      TabIndex        =   5
+      Selectable      =   False
+      TabIndex        =   7
       TabPanelIndex   =   0
-      TabStop         =   True
-      TextColor       =   "&c00000000"
+      Text            =   "A delay when used first time is for loading truetype fonts info"
+      TextAlign       =   0
+      TextColor       =   &h000000
       TextFont        =   "System"
-      TextSize        =   ""
+      TextSize        =   0
       TextUnit        =   0
-      Top             =   351
-      Underline       =   False
-      Value           =   False
+      Top             =   14
+      Transparent     =   False
+      Underline       =   ""
       Visible         =   True
-      Width           =   80
+      Width           =   256
    End
 End
 #tag EndWindow
@@ -286,6 +712,7 @@ End
 		  
 		  pdf.TextFont= "Times"
 		  pdf.DrawString "He llo wo rld Hell o wor ld", 100, 100, 50
+		  pdf.DrawString "D’  €250.50", 100, 200
 		  pdf.DrawLine 20, 20, 40, 40
 		  
 		  pdf.ForeColor= &cFF000000
@@ -405,9 +832,11 @@ End
 		  Dim pdf As New DBReportPDF //Default page size: letter
 		  
 		  pdf.DrawTextArea TextArea1, 50, 50, 500
+		  'pdf.DrawTextAreaAsImage TextArea1, 50, 50, 500
+		  pdf.DrawPicture Beer, 50, pdf.GetCurrentBaseLine+ 10
+		  pdf.DrawString "Signature", 50, pdf.GetCurrentBaseLine+ 10
 		  
 		  Dim f as FolderItem
-		  
 		  #if TargetLinux
 		    f= SpecialFolder.UserHome.Child("DBReportPDF StyledText test.pdf")
 		  #else
@@ -417,6 +846,116 @@ End
 		  pdf.Save(f)
 		  
 		  f.Launch
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tbNew
+	#tag Event
+		Sub Action()
+		  TextArea1.Text= ""
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tbFont
+	#tag Event
+		Sub Open()
+		  dim u as integer = FontCount-1
+		  
+		  for i as integer = 0 to u
+		    me.AddRow font(i)
+		  next
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Action()
+		  if me.MenuValue>=0 then
+		    
+		    dim fontname as string = me.List(me.MenuValue)
+		    Me.Caption= fontname
+		    
+		    If TextArea1.SelTextFont<> fontname Then TextArea1.SelTextFont= fontname
+		    
+		  end if
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tbFontSize
+	#tag Event
+		Sub TextChange()
+		  Dim size As Double= Val(Me.Text)
+		  
+		  If size> 6 And TextArea1.SelTextSize<> size Then
+		    TextArea1.SelTextSize=size
+		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tbFontSizePopup
+	#tag Event
+		Sub Open()
+		  for i as integer = 8 to 100 Step 2
+		    me.AddRow Str(i)
+		  next
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Change()
+		  tbFontSize.Text= Me.List(Me.ListIndex)
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tbAlign
+	#tag Event
+		Sub Open()
+		  me.AddRow "Left"
+		  me.AddRow "Center"
+		  me.AddRow "Right"
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Action()
+		  if me.MenuValue>= 0 then
+		    
+		    Me.Caption= me.List(me.MenuValue)
+		    
+		    Select Case Me.Caption
+		    Case "Left"
+		      If TextArea1.SelAlignment<> TextArea.AlignLeft Then TextArea1.SelAlignment = TextArea.AlignLeft
+		    Case "Center"
+		      If TextArea1.SelAlignment<> TextArea.AlignCenter Then TextArea1.SelAlignment = TextArea.AlignCenter
+		    Case "Right"
+		      If TextArea1.SelAlignment<> TextArea.AlignRight Then TextArea1.SelAlignment = TextArea.AlignRight
+		    End Select
+		    
+		  end if
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tbFontBold
+	#tag Event
+		Sub Action()
+		  If TextArea1.SelBold<> me.Value Then TextArea1.SelBold = me.Value
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tbFontItalic
+	#tag Event
+		Sub Action()
+		  If TextArea1.SelItalic<> me.Value Then TextArea1.SelItalic = me.Value
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tbFontUnderline
+	#tag Event
+		Sub Action()
+		  If TextArea1.SelUnderline<> me.Value Then TextArea1.SelUnderline = me.Value
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tbFontColor
+	#tag Event
+		Sub Changed()
+		  If TextArea1.SelTextColor<> me.current Then TextArea1.SelTextColor = me.current
 		End Sub
 	#tag EndEvent
 #tag EndEvents

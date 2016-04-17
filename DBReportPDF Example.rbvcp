@@ -1,5 +1,5 @@
 Type=Desktop
-RBProjectVersion=2012.02
+RBProjectVersion=2011.043
 MinIDEVersion=20070100
 Class=App;App.rbbas;&h10B50FFF;&h0;false
 Window=Window1;Window1.rbfrm;&h656A4FFF;&h0;false
@@ -7,6 +7,7 @@ MenuBar=MenuBar1;MenuBar1.rbmnu;&h5C804FFF;&h0;false
 BuildSteps=Build Automation;Build Automation.rbbas;&h28E097FF;&h0;false
 Picture=Beer;Images/Beer.png;&h4F281FFF;&h0;false;0;&h0
 Picture=SaveFile;Images/SaveFile.png;&h331EFFF;&h0;false;0;&h0
+Class=ColorPanel;ColorPanel.rbbas;&h58FD67FF;&h0;false
 Folder=Component;Component;&h2A0CCFFF;&h0;false
 Module=DBReportShared;Component/DBReportShared.rbbas;&h62612FFF;&h2A0CCFFF;false
 Class=DBReportPDF;Component/DBReportPDF.rbbas;&h1544FFFF;&h2A0CCFFF;false
