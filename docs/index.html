@@ -13,6 +13,7 @@
         <link href="./css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="./css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="./css/highlight.css">
+        <link href="./css/vs.css" rel="stylesheet">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -108,14 +109,53 @@ Based on pdfFile by Toby W. Rush and <a href="https://github.com/roblthegreat/rs
 <h2 id="use">Use</h2>
 <p>Open <code>DBReportPDF Example.rbvcp</code> for RealStudio or <code>DBReportPDF Example.xojo_binary_project</code> for xojo.</p>
 <p>See the Button PDF Action event for create PDF file.</p>
-<p>Some util commands:</p>
+<h3 id="some-commands">Some commands:</h3>
 <ul>
-<li><code>Dim pdf As New DBReportPDF</code> - Create a new object with default paper size (letter).</li>
-<li><code>pdf.Author, pdf.Title, pdf.Subject, pdf.Keywords</code> - Define properties.</li>
-<li><code>pdf.DrawString, pdf.DrawLine, pdf.DrawRect, pdf.DrawOval, pdf.DrawPicture</code> - Draw someting.</li>
-<li><code>pdf.NextPage</code> - Create a new page.</li>
-<li><code>pdf.Save</code> - Save the pdf on a FolderItem.</li>
+<li>Create a new object with default paper size (letter).</li>
 </ul>
+<pre><code class="vb">Dim pdf As New DBReportPDF
+</code></pre>
+
+<ul>
+<li>Define properties.</li>
+</ul>
+<pre><code class="vb">pdf.Author= &quot;Me, the author&quot;
+pdf.Title= &quot;The title&quot;
+pdf.Subject= &quot;someelse&quot;
+pdf.Keywords= &quot;some keyword&quot;
+</code></pre>
+
+<ul>
+<li>Draw someting.</li>
+</ul>
+<pre><code class="vb">pdf.TextFont= &quot;Times&quot;
+pdf.DrawString &quot;Hello world&quot;, 100, 100, 50
+
+pdf.DrawLine 20, 20, 40, 40
+
+pdf.ForeColor= &amp;c40004000
+pdf.PenWidth= 2
+pdf.DrawRect 20, 20, 20, 20
+
+pdf.DrawOval 200, 20, 20, 20
+
+pdf.DrawPicture SaveFile, 300, 40
+</code></pre>
+
+<ul>
+<li>Create a new page.</li>
+</ul>
+<pre><code class="vb">pdf.NextPage
+pdf.Landscape= True
+</code></pre>
+
+<ul>
+<li>Save the pdf on a FolderItem.</li>
+</ul>
+<pre><code class="vb">Dim f as FolderItem= SpecialFolder.Desktop.Child(&quot;DBReportPDF test.pdf&quot;)
+pdf.Save(f)
+</code></pre>
+
 <h2 id="configuration">Configuration</h2>
 <p>The file <code>DBReportShared</code> has a <code>kzlibPath</code> constant. That contains the location of zlib shared library for compression.</p>
 <p>The ZLIB1.DLL file is for Windows SO, in macOS or linux you <strong>need</strong> install the 32bit version 
@@ -158,5 +198,5 @@ Based on pdfFile by Toby W. Rush and <a href="https://github.com/roblthegreat/rs
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-05-24 00:29:07
+Build Date UTC : 2017-05-24 02:18:19
 -->

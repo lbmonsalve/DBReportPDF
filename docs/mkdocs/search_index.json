@@ -2,7 +2,7 @@
     "docs": [
         {
             "location": "/", 
-            "text": "DBReportPDF\n\n\n\n\nIs a \nXojo/(Real Basic)\n component for create PDF files.\nBased on pdfFile by Toby W. Rush and \nroblthegreat/rsfpdf\n.\n\n\nv0.2.2817 by Bernardo Monsalve.\n\n\nRequirements\n\n\nYou can use in projects since RealStudio 2011r4 to Xojo 2016r4, desktop and console apps.\n\n\nInstallation\n\n\nAdd Component/* files to your project.\n\n\nUse\n\n\nOpen \nDBReportPDF Example.rbvcp\n for RealStudio or \nDBReportPDF Example.xojo_binary_project\n for xojo.\n\n\nSee the Button PDF Action event for create PDF file.\n\n\nSome util commands:\n\n\n\n\nDim pdf As New DBReportPDF\n - Create a new object with default paper size (letter).\n\n\npdf.Author, pdf.Title, pdf.Subject, pdf.Keywords\n - Define properties.\n\n\npdf.DrawString, pdf.DrawLine, pdf.DrawRect, pdf.DrawOval, pdf.DrawPicture\n - Draw someting.\n\n\npdf.NextPage\n - Create a new page.\n\n\npdf.Save\n - Save the pdf on a FolderItem.\n\n\n\n\nConfiguration\n\n\nThe file \nDBReportShared\n has a \nkzlibPath\n constant. That contains the location of zlib shared library for compression.\n\n\nThe ZLIB1.DLL file is for Windows SO, in macOS or linux you \nneed\n install the 32bit version \n(except Xojo 64bit) or disable compression with \npdf.Compression= False\n.", 
+            "text": "DBReportPDF\n\n\n\n\nIs a \nXojo/(Real Basic)\n component for create PDF files.\nBased on pdfFile by Toby W. Rush and \nroblthegreat/rsfpdf\n.\n\n\nv0.2.2817 by Bernardo Monsalve.\n\n\nRequirements\n\n\nYou can use in projects since RealStudio 2011r4 to Xojo 2016r4, desktop and console apps.\n\n\nInstallation\n\n\nAdd Component/* files to your project.\n\n\nUse\n\n\nOpen \nDBReportPDF Example.rbvcp\n for RealStudio or \nDBReportPDF Example.xojo_binary_project\n for xojo.\n\n\nSee the Button PDF Action event for create PDF file.\n\n\nSome commands:\n\n\n\n\nCreate a new object with default paper size (letter).\n\n\n\n\nDim pdf As New DBReportPDF\n\n\n\n\n\n\nDefine properties.\n\n\n\n\npdf.Author= \nMe, the author\n\npdf.Title= \nThe title\n\npdf.Subject= \nsomeelse\n\npdf.Keywords= \nsome keyword\n\n\n\n\n\n\n\nDraw someting.\n\n\n\n\npdf.TextFont= \nTimes\n\npdf.DrawString \nHello world\n, 100, 100, 50\n\npdf.DrawLine 20, 20, 40, 40\n\npdf.ForeColor= \nc40004000\npdf.PenWidth= 2\npdf.DrawRect 20, 20, 20, 20\n\npdf.DrawOval 200, 20, 20, 20\n\npdf.DrawPicture SaveFile, 300, 40\n\n\n\n\n\n\nCreate a new page.\n\n\n\n\npdf.NextPage\npdf.Landscape= True\n\n\n\n\n\n\nSave the pdf on a FolderItem.\n\n\n\n\nDim f as FolderItem= SpecialFolder.Desktop.Child(\nDBReportPDF test.pdf\n)\npdf.Save(f)\n\n\n\n\nConfiguration\n\n\nThe file \nDBReportShared\n has a \nkzlibPath\n constant. That contains the location of zlib shared library for compression.\n\n\nThe ZLIB1.DLL file is for Windows SO, in macOS or linux you \nneed\n install the 32bit version \n(except Xojo 64bit) or disable compression with \npdf.Compression= False\n.", 
             "title": "Home"
         }, 
         {
@@ -22,8 +22,13 @@
         }, 
         {
             "location": "/#use", 
-            "text": "Open  DBReportPDF Example.rbvcp  for RealStudio or  DBReportPDF Example.xojo_binary_project  for xojo.  See the Button PDF Action event for create PDF file.  Some util commands:   Dim pdf As New DBReportPDF  - Create a new object with default paper size (letter).  pdf.Author, pdf.Title, pdf.Subject, pdf.Keywords  - Define properties.  pdf.DrawString, pdf.DrawLine, pdf.DrawRect, pdf.DrawOval, pdf.DrawPicture  - Draw someting.  pdf.NextPage  - Create a new page.  pdf.Save  - Save the pdf on a FolderItem.", 
+            "text": "Open  DBReportPDF Example.rbvcp  for RealStudio or  DBReportPDF Example.xojo_binary_project  for xojo.  See the Button PDF Action event for create PDF file.", 
             "title": "Use"
+        }, 
+        {
+            "location": "/#some-commands", 
+            "text": "Create a new object with default paper size (letter).   Dim pdf As New DBReportPDF   Define properties.   pdf.Author=  Me, the author \npdf.Title=  The title \npdf.Subject=  someelse \npdf.Keywords=  some keyword    Draw someting.   pdf.TextFont=  Times \npdf.DrawString  Hello world , 100, 100, 50\n\npdf.DrawLine 20, 20, 40, 40\n\npdf.ForeColor=  c40004000\npdf.PenWidth= 2\npdf.DrawRect 20, 20, 20, 20\n\npdf.DrawOval 200, 20, 20, 20\n\npdf.DrawPicture SaveFile, 300, 40   Create a new page.   pdf.NextPage\npdf.Landscape= True   Save the pdf on a FolderItem.   Dim f as FolderItem= SpecialFolder.Desktop.Child( DBReportPDF test.pdf )\npdf.Save(f)", 
+            "title": "Some commands:"
         }, 
         {
             "location": "/#configuration", 

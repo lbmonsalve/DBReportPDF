@@ -1,0 +1,9 @@
+site_name: DBReportPDF
+pages:
+- Home: index.md
+- About:
+    - Release Notes: release.md
+    - License: license.md
+
+extra_css:
+    - css/vs.css
