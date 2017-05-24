@@ -2,42 +2,52 @@
     "docs": [
         {
             "location": "/", 
-            "text": "Welcome to DBReportPDF\n\n\nFor full documentation visit \nmkdocs.org\n.\n\n\nCommands\n\n\n\n\nmkdocs new [dir-name]\n - Create a new project.\n\n\nmkdocs serve\n - Start the live-reloading docs server.\n\n\nmkdocs build\n - Build the documentation site.\n\n\nmkdocs help\n - Print this help message.\n\n\n\n\nProject layout\n\n\nmkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.", 
+            "text": "DBReportPDF\n\n\n\n\nIs a \nXojo/(Real Basic)\n component for create PDF files.\nBased on pdfFile by Toby W. Rush and \nroblthegreat/rsfpdf\n.\n\n\nv0.2.2817 by Bernardo Monsalve.\n\n\nRequirements\n\n\nYou can use in projects since RealStudio 2011r4 to Xojo 2016r4, desktop and console apps.\n\n\nInstallation\n\n\nAdd Component/* files to your project.\n\n\nUse\n\n\nOpen \nDBReportPDF Example.rbvcp\n for RealStudio or \nDBReportPDF Example.xojo_binary_project\n for xojo.\n\n\nSee the Button PDF Action event for create PDF file.\n\n\nSome util commands:\n\n\n\n\nDim pdf As New DBReportPDF\n - Create a new object with default paper size (letter).\n\n\npdf.Author, pdf.Title, pdf.Subject, pdf.Keywords\n - Define properties.\n\n\npdf.DrawString, pdf.DrawLine, pdf.DrawRect, pdf.DrawOval, pdf.DrawPicture\n - Draw someting.\n\n\npdf.NextPage\n - Create a new page.\n\n\npdf.Save\n - Save the pdf on a FolderItem.\n\n\n\n\nConfiguration\n\n\nThe file \nDBReportShared\n has a \nkzlibPath\n constant. That contains the location of zlib shared library for compression.\n\n\nThe ZLIB1.DLL file is for Windows SO, in macOS or linux you \nneed\n install the 32bit version \n(except Xojo 64bit) or disable compression with \npdf.Compression= False\n.", 
             "title": "Home"
         }, 
         {
-            "location": "/#welcome-to-dbreportpdf", 
-            "text": "For full documentation visit  mkdocs.org .", 
-            "title": "Welcome to DBReportPDF"
+            "location": "/#dbreportpdf", 
+            "text": "Is a  Xojo/(Real Basic)  component for create PDF files.\nBased on pdfFile by Toby W. Rush and  roblthegreat/rsfpdf .  v0.2.2817 by Bernardo Monsalve.", 
+            "title": "DBReportPDF"
         }, 
         {
-            "location": "/#commands", 
-            "text": "mkdocs new [dir-name]  - Create a new project.  mkdocs serve  - Start the live-reloading docs server.  mkdocs build  - Build the documentation site.  mkdocs help  - Print this help message.", 
-            "title": "Commands"
+            "location": "/#requirements", 
+            "text": "You can use in projects since RealStudio 2011r4 to Xojo 2016r4, desktop and console apps.", 
+            "title": "Requirements"
         }, 
         {
-            "location": "/#project-layout", 
-            "text": "mkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.", 
-            "title": "Project layout"
+            "location": "/#installation", 
+            "text": "Add Component/* files to your project.", 
+            "title": "Installation"
+        }, 
+        {
+            "location": "/#use", 
+            "text": "Open  DBReportPDF Example.rbvcp  for RealStudio or  DBReportPDF Example.xojo_binary_project  for xojo.  See the Button PDF Action event for create PDF file.  Some util commands:   Dim pdf As New DBReportPDF  - Create a new object with default paper size (letter).  pdf.Author, pdf.Title, pdf.Subject, pdf.Keywords  - Define properties.  pdf.DrawString, pdf.DrawLine, pdf.DrawRect, pdf.DrawOval, pdf.DrawPicture  - Draw someting.  pdf.NextPage  - Create a new page.  pdf.Save  - Save the pdf on a FolderItem.", 
+            "title": "Use"
+        }, 
+        {
+            "location": "/#configuration", 
+            "text": "The file  DBReportShared  has a  kzlibPath  constant. That contains the location of zlib shared library for compression.  The ZLIB1.DLL file is for Windows SO, in macOS or linux you  need  install the 32bit version \n(except Xojo 64bit) or disable compression with  pdf.Compression= False .", 
+            "title": "Configuration"
         }, 
         {
             "location": "/release/", 
-            "text": "Release notes", 
+            "text": "Release notes\n\n\n0.2.2817\n\n\n- Fixed console issues.\n\n\n0.2.1614\n\n\n- Fixed ReadShort, ReadLong; Deprecated on Xojo 2015r2.\n\n\n0.2.1515\n\n\n* Add AddFontFolder.\n- Fixed some messages on Adobe reader.\n- Fixed fonts true type on windows objs.\n\n\n0.2.1510\n\n\n* Add DrawTextAreaAsImage.\n- Fixed some DrawTextArea issues.\n\n\n0.2.1504\n\n\n* Add GetCurrentBaseLine.\n- Fixed some DrawTextArea issues.\n\n\n0.2.1427\n\n\n- Fixed EURO and other characters.\n- Fixed multiline text problem.\n\n\n0.2.1404\n\n\n* Add support for image resolutions\n\n\n0.2.0204\n\n\n* Initial release", 
             "title": "Release Notes"
         }, 
         {
             "location": "/release/#release-notes", 
-            "text": "", 
+            "text": "0.2.2817  - Fixed console issues.  0.2.1614  - Fixed ReadShort, ReadLong; Deprecated on Xojo 2015r2.  0.2.1515  * Add AddFontFolder.\n- Fixed some messages on Adobe reader.\n- Fixed fonts true type on windows objs.  0.2.1510  * Add DrawTextAreaAsImage.\n- Fixed some DrawTextArea issues.  0.2.1504  * Add GetCurrentBaseLine.\n- Fixed some DrawTextArea issues.  0.2.1427  - Fixed EURO and other characters.\n- Fixed multiline text problem.  0.2.1404  * Add support for image resolutions  0.2.0204  * Initial release", 
             "title": "Release notes"
         }, 
         {
             "location": "/license/", 
-            "text": "License", 
+            "text": "License\n\n\nThe MIT License (MIT)\n\nCopyright (c) 2014 lbmonsalve\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \nSoftware\n), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \nAS IS\n, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.", 
             "title": "License"
         }, 
         {
             "location": "/license/#license", 
-            "text": "", 
+            "text": "The MIT License (MIT)\n\nCopyright (c) 2014 lbmonsalve\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the  Software ), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED  AS IS , WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.", 
             "title": "License"
         }
     ]

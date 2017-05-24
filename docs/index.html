@@ -87,28 +87,39 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#welcome-to-dbreportpdf">Welcome to DBReportPDF</a></li>
-            <li><a href="#commands">Commands</a></li>
-            <li><a href="#project-layout">Project layout</a></li>
+        <li class="main active"><a href="#dbreportpdf">DBReportPDF</a></li>
+            <li><a href="#requirements">Requirements</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#use">Use</a></li>
+            <li><a href="#configuration">Configuration</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="welcome-to-dbreportpdf">Welcome to DBReportPDF</h1>
-<p>For full documentation visit <a href="http://mkdocs.org">mkdocs.org</a>.</p>
-<h2 id="commands">Commands</h2>
+<h1 id="dbreportpdf">DBReportPDF</h1>
+<hr />
+<p>Is a <a href="http://www.xojo.com">Xojo/(Real Basic)</a> component for create PDF files.
+Based on pdfFile by Toby W. Rush and <a href="https://github.com/roblthegreat/rsfpdf">roblthegreat/rsfpdf</a>.</p>
+<p>v0.2.2817 by Bernardo Monsalve.</p>
+<h2 id="requirements">Requirements</h2>
+<p>You can use in projects since RealStudio 2011r4 to Xojo 2016r4, desktop and console apps.</p>
+<h2 id="installation">Installation</h2>
+<p>Add Component/* files to your project.</p>
+<h2 id="use">Use</h2>
+<p>Open <code>DBReportPDF Example.rbvcp</code> for RealStudio or <code>DBReportPDF Example.xojo_binary_project</code> for xojo.</p>
+<p>See the Button PDF Action event for create PDF file.</p>
+<p>Some util commands:</p>
 <ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs help</code> - Print this help message.</li>
+<li><code>Dim pdf As New DBReportPDF</code> - Create a new object with default paper size (letter).</li>
+<li><code>pdf.Author, pdf.Title, pdf.Subject, pdf.Keywords</code> - Define properties.</li>
+<li><code>pdf.DrawString, pdf.DrawLine, pdf.DrawRect, pdf.DrawOval, pdf.DrawPicture</code> - Draw someting.</li>
+<li><code>pdf.NextPage</code> - Create a new page.</li>
+<li><code>pdf.Save</code> - Save the pdf on a FolderItem.</li>
 </ul>
-<h2 id="project-layout">Project layout</h2>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
-</code></pre></div>
+<h2 id="configuration">Configuration</h2>
+<p>The file <code>DBReportShared</code> has a <code>kzlibPath</code> constant. That contains the location of zlib shared library for compression.</p>
+<p>The ZLIB1.DLL file is for Windows SO, in macOS or linux you <strong>need</strong> install the 32bit version 
+(except Xojo 64bit) or disable compression with <code>pdf.Compression= False</code>.</p></div>
         </div>
 
         <footer class="col-md-12">
@@ -147,5 +158,5 @@ docs/
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-05-23 22:58:24
+Build Date UTC : 2017-05-24 00:29:07
 -->
