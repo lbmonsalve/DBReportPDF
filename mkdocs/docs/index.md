@@ -5,7 +5,7 @@
 Is a [Xojo/(Real Basic)](http://www.xojo.com) component for create PDF files.
 Based on pdfFile by Toby W. Rush and [roblthegreat/rsfpdf](https://github.com/roblthegreat/rsfpdf).
 
-v0.2.2817 by Bernardo Monsalve.
+[See on github](https://github.com/lbmonsalve/DBReportPDF/) v0.2.2817 by Bernardo Monsalve.
 
 ## Requirements
 
