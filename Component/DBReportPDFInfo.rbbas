@@ -21,6 +21,11 @@ Inherits DBReportPDFObject
 		  #else
 		    t= " - (Linux)"
 		  #endif
+		  #if RBVersion> 2017.01
+		    #if Target64Bit
+		      t= t+ " 64bit"
+		    #endif
+		  #endif
 		  
 		  s= "<< "
 		  If FileRoot.Title<> "" Then

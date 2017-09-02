@@ -100,7 +100,7 @@ Inherits DBReportPDFObject
 		    SubType= "TrueType"
 		    
 		    #if TargetWin32
-		      If True Then // loadFont
+		      If LoadFontInfo Then // loadFont
 		        If Not FontInfoLoaded Then LoadFontInfoWin
 		        SetFontInfo BaseFont, Bold, Italic
 		      Else
@@ -782,6 +782,10 @@ Inherits DBReportPDFObject
 
 	#tag Property, Flags = &h0
 		LastChar As Integer = 255
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		Shared LoadFontInfo As Boolean = False
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

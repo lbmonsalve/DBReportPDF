@@ -971,7 +971,7 @@ Protected Class DBReportPDF
 
 	#tag Method, Flags = &h21
 		Private Sub Init()
-		  #If TargetWin32 And TargetHasGUI
+		  #If TargetWin32 And Not TargetConsole
 		    App.UseGDIPlus = True
 		  #endif
 		  
@@ -1161,7 +1161,7 @@ Protected Class DBReportPDF
 
 	#tag Method, Flags = &h0
 		 Shared Function zlibCompress(input as String) As String
-		  Soft Declare Function zlibcompress Lib DBReportShared.kzlibPath Alias "compress" (dest As Ptr, ByRef destLen As Uint32, source As CString, sourceLen As UInt32) As Integer
+		  Soft Declare Function zlibcompress Lib DBReportShared.kzlibPath Alias "compress" (dest As Ptr, ByRef destLen As Uint32, source As CString, sourceLen As UInt32) As Int32
 		  
 		  zlibLastErrorCode= 0
 		  
@@ -1169,6 +1169,13 @@ Protected Class DBReportPDF
 		  Dim outputSize As UInt32= output.Size
 		  
 		  zlibLastErrorCode= zlibcompress(output, outputSize, input, LenB(input))
+		  
+		  #if RBVersion> 2017.01
+		    #if Target64Bit
+		      Dim err As Integer= zlibcompress(output, outputSize, input, LenB(input))
+		    #endif
+		  #endif
+		  
 		  If zlibLastErrorCode= 0 Then
 		    Return output.StringValue(0, outputSize)
 		  Else
@@ -1191,6 +1198,13 @@ Protected Class DBReportPDF
 		    Dim m As New MemoryBlock(bufferSize)
 		    Dim destLength As UInt32= m.Size
 		    zlibLastErrorCode= zlibuncompress(m, destLength, input, LenB(input))
+		    
+		    #if RBVersion> 2017.01
+		      #if Target64Bit
+		        Dim err As Integer= zlibuncompress(m, destLength, input, LenB(input))
+		      #endif
+		    #endif
+		    
 		    If zlibLastErrorCode= 0 Then
 		      Return m.StringValue(0, destLength)
 		    ElseIf zlibLastErrorCode= Z_BUF_ERROR Then
@@ -1217,13 +1231,22 @@ Protected Class DBReportPDF
 
 
 	#tag Note, Name = Readme
-		DBReportPDF v0.2.2817
+		DBReportPDF v0.2.4201
 		
 		Based on pdfFile by Toby W. Rush and rsfpdf from https://github.com/roblthegreat/rsfpdf
 		
 		by Bernardo Monsalve Copyright © 2014-2015 Bernardo Monsalve. All rights reserved.
 		
 		Version changelog:
+		
+		0.2.4201
+		
+		* Add "64bit" to producer info.
+		- Fixed compress in 64bit.
+		
+		0.2.4012
+		
+		* Add DBReportPDFFont.LoadFontInfo
 		
 		0.2.2817
 		
@@ -1474,7 +1497,7 @@ Protected Class DBReportPDF
 	#tag Constant, Name = kPageWidth, Type = Double, Dynamic = False, Default = \"612", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.2817", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.4201", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = Z_BUF_ERROR, Type = Double, Dynamic = False, Default = \"-5", Scope = Private
