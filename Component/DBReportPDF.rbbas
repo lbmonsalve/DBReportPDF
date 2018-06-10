@@ -971,7 +971,7 @@ Protected Class DBReportPDF
 
 	#tag Method, Flags = &h21
 		Private Sub Init()
-		  #If TargetWin32 And Not TargetConsole
+		  #If TargetWin32 And RBVersion< 2017 And Not TargetConsole
 		    App.UseGDIPlus = True
 		  #endif
 		  
@@ -1231,13 +1231,17 @@ Protected Class DBReportPDF
 
 
 	#tag Note, Name = Readme
-		DBReportPDF v0.2.4201
+		DBReportPDF v0.2.4810
 		
 		Based on pdfFile by Toby W. Rush and rsfpdf from https://github.com/roblthegreat/rsfpdf
 		
 		by Bernardo Monsalve Copyright © 2014-2015 Bernardo Monsalve. All rights reserved.
 		
 		Version changelog:
+		
+		0.2.4810
+		
+		- Fixed Compression when set true and not library avaible.
 		
 		0.2.4201
 		
@@ -1310,9 +1314,21 @@ Protected Class DBReportPDF
 		Private CacheFontWidths As Dictionary
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		Compression As Boolean = True
-	#tag EndProperty
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  If mCompression And System.IsFunctionAvailable("compress", DBReportShared.kzlibPath) Then Return True
+			  
+			  return False
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  mCompression = value
+			End Set
+		#tag EndSetter
+		Compression As Boolean
+	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
 		Private Shared CR As String
@@ -1370,6 +1386,10 @@ Protected Class DBReportPDF
 		#tag EndSetter
 		Landscape As Boolean
 	#tag EndComputedProperty
+
+	#tag Property, Flags = &h21
+		Private mCompression As Boolean = True
+	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private mCurrentBaseLine As Double
@@ -1497,7 +1517,7 @@ Protected Class DBReportPDF
 	#tag Constant, Name = kPageWidth, Type = Double, Dynamic = False, Default = \"612", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.4201", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.2.4810", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = Z_BUF_ERROR, Type = Double, Dynamic = False, Default = \"-5", Scope = Private
