@@ -1317,9 +1317,14 @@ Protected Class DBReportPDF
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  If mCompression And System.IsFunctionAvailable("compress", DBReportShared.kzlibPath) Then Return True
-			  
-			  return False
+			  #if TargetMacOS And Target64Bit
+			    'If mCompression And System.IsFunctionAvailable("compress", DBReportShared.kzlibPath) Then Return True
+			    If mCompression And Not (zlibCompress("hello")= "hello") Then Return True
+			    
+			    return False
+			  #else
+			    Return mCompression
+			  #endif
 			End Get
 		#tag EndGetter
 		#tag Setter
