@@ -136,6 +136,13 @@ Inherits DBReportPDFXObject
 			InheritedFrom="DBReportPDFObject"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="PictureQuality"
+			Group="Behavior"
+			InitialValue="80"
+			Type="Integer"
+			InheritedFrom="DBReportPDFXObject"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"

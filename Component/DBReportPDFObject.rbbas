@@ -33,15 +33,20 @@ Protected Class DBReportPDFObject
 		  src= src.ReplaceAll(Chr(9), "\t")
 		  src= src.ReplaceAll(CR, "\n")
 		  
-		  Dim s As String
+		  Dim s, char As String
 		  Dim c As Integer
 		  For i As Integer= 1 To src.Len
-		    c= ConvertEncoding(src.Mid(i, 1), Encodings.WindowsLatin2).Asc
-		    If c>= 32 And c<= 126 Then
-		      s= s+ Encodings.ASCII.Chr(c)
+		    char= src.Mid(i, 1)
+		    If char= "€" Then // special case
+		      s= s+ "\200"
 		    Else
-		      s= s+ "\"+ Oct(c)
-		    End
+		      c= ConvertEncoding(char, Encodings.ISOLatin1).Asc
+		      If c>= 32 And c<= 126 Then
+		        s= s+ Encodings.ASCII.Chr(c)
+		      Else
+		        s= s+ "\"+ Oct(c)
+		      End
+		    End If
 		  Next
 		  
 		  Return s
